@@ -22,7 +22,7 @@ function varargout = pd_gui1(varargin)
 
 % Edit the above text to modify the response to help pd_gui1
 
-% Last Modified by GUIDE v2.5 13-Jan-2018 11:25:40
+% Last Modified by GUIDE v2.5 13-Jan-2018 15:45:20
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -59,7 +59,7 @@ handles.output = hObject;
 guidata(hObject, handles);
 
 % UIWAIT makes pd_gui1 wait for user response (see UIRESUME)
-% uiwait(handles.figure1);
+% uiwait(handles.gui0);
 
 
 % --- Outputs from this function are returned to the command line.
@@ -162,6 +162,11 @@ hold on;
 plot(m:n, handles.data(m:n),'r')
 hold off;
 
+% save data for handler 
+% similar.fig use
+handles.a = handles.SavedSignal(idx,:);
+guidata(hObject, handles);
+
 
 
 % --- Executes during object creation, after setting all properties.
@@ -200,3 +205,11 @@ function pushbutton4_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 batch_select();
+
+
+% --- Executes on button press in pushbutton5.
+function pushbutton5_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton5 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+similar;
