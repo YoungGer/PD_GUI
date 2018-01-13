@@ -27,7 +27,7 @@ data=data*power_ratio/1000;
 %% calculate signlas params
  
 %xiaodi的Kmeans中用到的参数：第一行是PD位置，第二行是PD种类，第三行是信号宽度，第四行是上升时间，第五行是幅值，第六行是极性
-SavedSignal=zeros(NoShakeSignalStartMaxStop(1,1),18);
+SavedSignal=zeros(NoShakeSignalStartMaxStop(1,1),20);
 SavedSignalForKmeans=zeros(NoShakeSignalStartMaxStop(1,1),18);
 SavedSignalForKohonenMappingSinglePulse=zeros(NoShakeSignalStartMaxStop(1,1),5);
 SavedSignalForKohonenMapingWhole20mS=zeros(1,11);
@@ -91,6 +91,9 @@ SavedSignalForKohonenMapingWhole20mSBuffer=zeros(1,5);
    [T, W]=TW1(Evaluationdata);
    SavedSignal(index,17)= T;  
    SavedSignal(index,18)= W;
+   % 19 20, start_idxs end_idxs
+   SavedSignal(index,19) = NoShakeSignalStartMaxStop(index, 2);
+   SavedSignal(index,20) = NoShakeSignalStartMaxStop(index, 8);
    %xiaodi的Kmeans中用到的参数：第一行是PD位置，第二行是PD种类，第三行是信号宽度，第四行是上升时间，第五行是幅值，第六行是极性
     
    SavedSignalForKmeans(index,1)=SavedSignal(index,1);%%PDLocation
