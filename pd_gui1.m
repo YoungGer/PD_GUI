@@ -22,7 +22,7 @@ function varargout = pd_gui1(varargin)
 
 % Edit the above text to modify the response to help pd_gui1
 
-% Last Modified by GUIDE v2.5 26-Dec-2017 15:00:37
+% Last Modified by GUIDE v2.5 13-Jan-2018 10:39:30
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -192,3 +192,11 @@ function pushbutton_addnoise_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 idx = get(handles.popupmenu2, 'Value');
 dlmwrite('noise.csv', handles.SavedSignal(idx,:), 'delimiter', ',','-append');
+
+
+% --- Executes on button press in pushbutton4.
+function pushbutton4_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton4 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+batch_select();

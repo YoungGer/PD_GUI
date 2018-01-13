@@ -88,7 +88,7 @@ SavedSignalForKohonenMapingWhole20mSBuffer=zeros(1,5);
    SavedSignal(index,15)=ComputeMainFrequency(Evaluationdata);%计算信号主频 
    SavedSignal(index,16)= 360*PDLocation/2000000;%
    % add new T&W
-   [T, W]=TW1(Evaluationdata)
+   [T, W]=TW1(Evaluationdata);
    SavedSignal(index,17)= T;  
    SavedSignal(index,18)= W;
    %xiaodi的Kmeans中用到的参数：第一行是PD位置，第二行是PD种类，第三行是信号宽度，第四行是上升时间，第五行是幅值，第六行是极性
