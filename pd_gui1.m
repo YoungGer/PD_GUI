@@ -22,7 +22,7 @@ function varargout = pd_gui1(varargin)
 
 % Edit the above text to modify the response to help pd_gui1
 
-% Last Modified by GUIDE v2.5 13-Jan-2018 15:45:20
+% Last Modified by GUIDE v2.5 15-Jan-2018 10:54:45
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -89,9 +89,9 @@ data = ReadLeCroyBinaryWaveform(full_name);
 data=data.y*1000;
 
 
-[data, SavedSignal, NoShakeSignalStartMaxStop] = extract_signal(data);
+[data, SavedSignal, NoShakeSignalStartMaxStop, ThresthodValue] = extract_signal(data);
 
- 
+handles.ThresthodValue = ThresthodValue;
 handles.SavedSignal = SavedSignal;
 handles.data = data;
 guidata(hObject, handles);
@@ -124,7 +124,9 @@ end
 % plot 20ms data
 x0 = linspace(0,3.1415926*2,2000000);
 y0 = sin(x0) * 0.03;
+y1 = ones(1,size(x0, 2)) * handles.ThresthodValue / 1000;
 plot(y0, 'y');
+plot(y1, 'b');
 xlim([0 2000000]);
 hold off;
 %% show signals count
@@ -212,4 +214,160 @@ function pushbutton5_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton5 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-similar;
+
+%similar;
+[select_signal, select_data] = find_similar_signal(handles.a);
+
+handles.select_signal = select_signal;
+handles.select_data = select_data;
+handles.N = size(select_signal, 1);
+% set popupmenu
+b = 1:handles.N;
+set(handles.popupmenu4, 'string',  num2str(b'));
+
+% Update handles structure
+guidata(hObject, handles);
+
+% --- Executes on button press in pushbutton6.
+function pushbutton6_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton6 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% prpd;
+% plot pd data
+axes(handles.axes4);
+M = csvread('./pd_all.csv');
+hold on;
+plot(M(:,1), M(:,6) .* M(:,7), 'r+')
+x0 = linspace(0,3.1415926*2,2000000);
+y0 = sin(x0) * 0.03;
+plot(y0, 'y');
+% plot NOISE PRPD
+M = csvread('./noise_all.csv');
+plot(M(:,1), M(:,6) .* M(:,7), 'bo')
+xlim([0 2000000]);
+hold off;
+
+
+
+% --- Executes on selection change in popupmenu4.
+function popupmenu4_Callback(hObject, eventdata, handles)
+% hObject    handle to popupmenu4 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns popupmenu4 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from popupmenu4
+idx = get(handles.popupmenu4, 'Value');
+signals = handles.select_signal;
+datas = handles.select_data;
+axes(handles.axes3);
+plot(datas(idx,:));
+
+% --- Executes during object creation, after setting all properties.
+function popupmenu4_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to popupmenu4 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in pushbutton7.
+function pushbutton7_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton7 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% add pd
+idx = get(handles.popupmenu4, 'Value');
+dlmwrite('pd.csv', handles.select_signal(idx,:), 'delimiter', ',','-append');
+
+% --- Executes on button press in pushbutton8.
+function pushbutton8_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton8 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% add noise
+idx = get(handles.popupmenu4, 'Value');
+dlmwrite('noise.csv', handles.select_signal(idx,:), 'delimiter', ',','-append');
+
+
+% --- Executes on slider movement.
+function slider1_Callback(hObject, eventdata, handles)
+% hObject    handle to slider1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+
+
+% --- Executes during object creation, after setting all properties.
+function slider1_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to slider1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: slider controls usually have a light gray background.
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
+
+
+% --- Executes on button press in pushbutton9.
+function pushbutton9_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton9 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on slider movement.
+function slider2_Callback(hObject, eventdata, handles)
+% hObject    handle to slider2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+
+
+% --- Executes during object creation, after setting all properties.
+function slider2_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to slider2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: slider controls usually have a light gray background.
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
+
+
+
+function edit1_Callback(hObject, eventdata, handles)
+% hObject    handle to edit1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit1 as text
+%        str2double(get(hObject,'String')) returns contents of edit1 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit1_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
