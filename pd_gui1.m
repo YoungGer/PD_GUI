@@ -249,6 +249,25 @@ plot(M(:,1), M(:,6) .* M(:,7), 'bo')
 xlim([0 2000000]);
 hold off;
 
+% plot pd polar 
+M = csvread('./pd_all.csv');
+[pos_loc, pos_val, neg_loc, neg_val] = polarsize(M);
+axes(handles.axes5);
+polar(pos_loc, pos_val, 'bo')
+axes(handles.axes6);
+polar(neg_loc, neg_val, 'bo')
+
+% plot noise polar 
+M = csvread('./noise_all.csv');
+[pos_loc, pos_val, neg_loc, neg_val] = polarsize(M);
+axes(handles.axes7);
+polar(pos_loc, pos_val, 'r+')
+axes(handles.axes8);
+polar(neg_loc, neg_val, 'r+')
+
+
+
+
 
 
 % --- Executes on selection change in popupmenu4.
