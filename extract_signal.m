@@ -1,4 +1,4 @@
-function [data, SavedSignal, NoShakeSignalStartMaxStop] = extract_signal(data)
+function [data, SavedSignal, NoShakeSignalStartMaxStop, ThresthodValue] = extract_signal(data)
 
 %% extract signals
 power_ratio = 1;
@@ -126,6 +126,9 @@ SavedSignalForKmeans(index,10)=SavedSignal(index,4);%!!!!!RiseTime，暂时把这个参
      SavedSignalForKohonenMappingSinglePulse(index,3)=SavedSignal(index,12);%Kurtosis 
          SavedSignalForKohonenMappingSinglePulse(index,4)=SavedSignal(index,13);%Crest factor （( maximum magnitude over R.M.S)）
              SavedSignalForKohonenMappingSinglePulse(index,5)=11;%信号种类 
+             
+             
+        
  end
  
 end
