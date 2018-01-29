@@ -1,7 +1,8 @@
 function [data, SavedSignal, NoShakeSignalStartMaxStop, ThresthodValue] = extract_signal(data)
 
 %% extract signals
-power_ratio = 1;
+power_ratio = 1/17.7828;  % -25db channel 2
+
 
 AverageValue = mean(data); 
 data=data-AverageValue;

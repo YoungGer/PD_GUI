@@ -79,10 +79,10 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-%[filename, filepath] = uigetfile('*');
-%full_name = [filepath filename];
+% [filename, filepath] = uigetfile('*');
+% full_name = [filepath filename];
 
-full_name = '/Users/yangguangyao/Desktop/PDData/ygy_gui/C2Trace00011.trc';
+full_name = 'F:\局方GUI\PDData2\ygy_gui\C2Trace00011.trc';
 
 % read data
 data = ReadLeCroyBinaryWaveform(full_name);
@@ -123,8 +123,8 @@ end
 
 % plot 20ms data
 x0 = linspace(0,3.1415926*2,2000000);
-y0 = sin(x0) * 0.03;
-y1 = ones(1,size(x0, 2)) * handles.ThresthodValue / 1000;
+y0 = sin(x0) * 0.005;
+y1 = ones(1,size(x0, 2)) * handles.ThresthodValue / 1000 /17.7828;
 plot(y0, 'y');
 plot(y1, 'b');
 xlim([0 2000000]);
@@ -237,20 +237,23 @@ function pushbutton6_Callback(hObject, eventdata, handles)
 % prpd;
 % plot pd data
 axes(handles.axes4);
-M = csvread('./pd_all.csv');
+%M = csvread('./pd_all.csv');
+M = csvread('F:\局方GUI\data\1.5mm dia 10kv inception\pd_all.csv');
 hold on;
-plot(M(:,1), M(:,6) .* M(:,7), 'r+')
+plot(M(:,1), M(:,6) .* M(:,7), 'bo')
 x0 = linspace(0,3.1415926*2,2000000);
-y0 = sin(x0) * 0.03;
+y0 = sin(x0) * 0.005;
 plot(y0, 'y');
 % plot NOISE PRPD
-M = csvread('./noise_all.csv');
-plot(M(:,1), M(:,6) .* M(:,7), 'bo')
+%M = csvread('./noise_all.csv');
+M = csvread('F:\局方GUI\data\1.5mm dia 10kv inception\noise_all.csv');
+plot(M(:,1), M(:,6) .* M(:,7), 'r+')
 xlim([0 2000000]);
 hold off;
 
 % plot pd polar 
-M = csvread('./pd_all.csv');
+%M = csvread('./pd_all.csv');
+M = csvread('F:\局方GUI\data\1.5mm dia 10kv inception\pd_all.csv');
 [pos_loc, pos_val, neg_loc, neg_val] = polarsize(M);
 axes(handles.axes5);
 polar(pos_loc, pos_val, 'bo')
@@ -258,7 +261,8 @@ axes(handles.axes6);
 polar(neg_loc, neg_val, 'bo')
 
 % plot noise polar 
-M = csvread('./noise_all.csv');
+%M = csvread('./noise_all.csv');
+M = csvread('F:\局方GUI\data\1.5mm dia 10kv inception\noise_all.csv');
 [pos_loc, pos_val, neg_loc, neg_val] = polarsize(M);
 axes(handles.axes7);
 polar(pos_loc, pos_val, 'r+')
