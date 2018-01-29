@@ -91,6 +91,7 @@ data=data.y*1000;
 % find pre_thre
 pre_thre = str2double(get(handles.thre, 'string'));
 pre_thre = pre_thre * 17.7828;
+pre_thre
 [data, SavedSignal, NoShakeSignalStartMaxStop, ThresthodValue] = extract_signal(data, pre_thre);
 pre_thre
 ThresthodValue

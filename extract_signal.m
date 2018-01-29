@@ -15,7 +15,7 @@ PeakVSAverageLog=log10(PeakValue/AverageValue);
 STDVSAverageLog=log10(FormFactor);
 
 % set thresholf value
-if (pre_thre~=-1)
+if (pre_thre>0)
     ThresthodValue = pre_thre;
 else
     ThresthodValue=1.5*median(abs(data))/0.6745*sqrt(2*log(length(data)))*PeakVSAverageLog;
