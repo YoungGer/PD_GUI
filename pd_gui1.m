@@ -251,23 +251,31 @@ plot(M(:,1), M(:,6) .* M(:,7), 'r+')
 xlim([0 2000000]);
 hold off;
 
-% plot pd polar 
+% plot positive polar 
 %M = csvread('./pd_all.csv');
 M = csvread('F:\局方GUI\data\1.5mm dia 10kv inception\pd_all.csv');
 [pos_loc, pos_val, neg_loc, neg_val] = polarsize(M);
 axes(handles.axes5);
-polar(pos_loc, pos_val, 'bo')
-axes(handles.axes6);
-polar(neg_loc, neg_val, 'bo')
+polar(pos_loc, pos_val, 'b.')
+hold on;
 
-% plot noise polar 
-%M = csvread('./noise_all.csv');
 M = csvread('F:\局方GUI\data\1.5mm dia 10kv inception\noise_all.csv');
 [pos_loc, pos_val, neg_loc, neg_val] = polarsize(M);
-axes(handles.axes7);
 polar(pos_loc, pos_val, 'r+')
-axes(handles.axes8);
+hold off;
+
+% plot negative polar 
+%M = csvread('./pd_all.csv');
+M = csvread('F:\局方GUI\data\1.5mm dia 10kv inception\pd_all.csv');
+[pos_loc, pos_val, neg_loc, neg_val] = polarsize(M);
+axes(handles.axes6);
+polar(neg_loc, neg_val, 'b.')
+hold on;
+
+M = csvread('F:\局方GUI\data\1.5mm dia 10kv inception\noise_all.csv');
+[pos_loc, pos_val, neg_loc, neg_val] = polarsize(M);
 polar(neg_loc, neg_val, 'r+')
+hold off;
 
 
 
