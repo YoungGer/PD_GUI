@@ -1,4 +1,4 @@
-function [data, SavedSignal, NoShakeSignalStartMaxStop, ThresthodValue] = extract_signal(data)
+function [data, SavedSignal, NoShakeSignalStartMaxStop, ThresthodValue] = extract_signal(data, pre_thre)
 
 %% extract signals
 power_ratio = 1/17.7828;  % -25db channel 2
@@ -13,7 +13,13 @@ CrestFactor=PeakValue/StandardDiv;
 FormFactor=StandardDiv/AverageValue;
 PeakVSAverageLog=log10(PeakValue/AverageValue);
 STDVSAverageLog=log10(FormFactor);
-ThresthodValue=1.5*median(abs(data))/0.6745*sqrt(2*log(length(data)))*PeakVSAverageLog;
+
+% set thresholf value
+if (pre_thre~=-1)
+    ThresthodValue = pre_thre;
+else
+    ThresthodValue=1.5*median(abs(data))/0.6745*sqrt(2*log(length(data)))*PeakVSAverageLog;
+end
 [PDStartStopMaxPoint]=GetWaveShape(data ,0, 0 ,ThresthodValue);%获取所有信号大概的起始点终止点
 
 

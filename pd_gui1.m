@@ -22,7 +22,7 @@ function varargout = pd_gui1(varargin)
 
 % Edit the above text to modify the response to help pd_gui1
 
-% Last Modified by GUIDE v2.5 15-Jan-2018 10:54:45
+% Last Modified by GUIDE v2.5 29-Jan-2018 09:53:49
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -88,8 +88,13 @@ full_name = 'F:\¾Ö·½GUI\PDData2\ygy_gui\C2Trace00011.trc';
 data = ReadLeCroyBinaryWaveform(full_name);
 data=data.y*1000;
 
+% find pre_thre
+pre_thre = str2double(get(handles.thre, 'string'));
+pre_thre = pre_thre * 17.7828;
+[data, SavedSignal, NoShakeSignalStartMaxStop, ThresthodValue] = extract_signal(data, pre_thre);
+pre_thre
+ThresthodValue
 
-[data, SavedSignal, NoShakeSignalStartMaxStop, ThresthodValue] = extract_signal(data);
 
 handles.ThresthodValue = ThresthodValue;
 handles.SavedSignal = SavedSignal;
@@ -394,6 +399,29 @@ function edit1_Callback(hObject, eventdata, handles)
 % --- Executes during object creation, after setting all properties.
 function edit1_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to edit1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function thre_Callback(hObject, eventdata, handles)
+% hObject    handle to thre (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of thre as text
+%        str2double(get(hObject,'String')) returns contents of thre as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function thre_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to thre (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
