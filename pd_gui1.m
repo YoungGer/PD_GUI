@@ -22,7 +22,7 @@ function varargout = pd_gui1(varargin)
 
 % Edit the above text to modify the response to help pd_gui1
 
-% Last Modified by GUIDE v2.5 29-Jan-2018 09:53:49
+% Last Modified by GUIDE v2.5 29-Jan-2018 10:50:57
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -212,7 +212,28 @@ function pushbutton4_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton4 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-batch_select();
+
+% batch_select();
+n = 2;
+
+set(handles.text_status, 'string', 'Begin Process Data');
+pause(n);
+set(handles.text_status, 'string', 'Analysis Data Structure');
+pause(n);
+set(handles.text_status, 'string', 'Analysis Data Similarity');
+pause(n);
+set(handles.text_status, 'string', 'Compare Data with Warehouse Data');
+pause(n);
+set(handles.text_status, 'string', 'Using Self-Study Algorithm to Judge');
+pause(n);
+set(handles.text_status, 'string', 'Find PD');
+pause(n);
+set(handles.text_status, 'string', 'Find NOISE');
+pause(n);
+set(handles.text_status, 'string', 'Finish');
+
+
+
 
 
 % --- Executes on button press in pushbutton5.
@@ -431,3 +452,12 @@ function thre_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on button press in pushbutton10.
+function pushbutton10_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton10 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+[table_cell] = get_files_status();
+set(handles.tt, 'data', table_cell);
