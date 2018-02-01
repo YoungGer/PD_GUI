@@ -22,7 +22,7 @@ function varargout = pd_gui1(varargin)
 
 % Edit the above text to modify the response to help pd_gui1
 
-% Last Modified by GUIDE v2.5 29-Jan-2018 10:50:57
+% Last Modified by GUIDE v2.5 31-Jan-2018 10:03:25
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -79,14 +79,28 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% [filename, filepath] = uigetfile('*');
-% full_name = [filepath filename];
+[filename, filepath] = uigetfile('*');
+full_name = [filepath filename];
 
-full_name = 'F:\局方GUI\PDData2\ygy_gui\C2Trace00011.trc';
+% full_name = 'F:\局方GUI\PDData2\ygy_gui\C2Trace00011.trc';
 
-% read data
-data = ReadLeCroyBinaryWaveform(full_name);
-data=data.y*1000;
+% judge if trc or txt
+if strcmp(full_name(length(full_name)-2:length(full_name)), 'trc')
+    trc_flag = 1;
+else
+    trc_flag = 0;
+end
+
+% get data from txt or trc
+if trc_flag
+    data = ReadLeCroyBinaryWaveform(full_name);
+    data=data.y*1000;
+else
+    fileID = fopen(full_name);
+    data = fscanf(fileID, '%f');
+    fclose(fileID);
+    data = data*1000;
+end
 
 % find pre_thre
 pre_thre = str2double(get(handles.thre, 'string'));
@@ -128,11 +142,11 @@ for i = 1:length(start_idxs)
 end
 
 % plot 20ms data
-x0 = linspace(0,3.1415926*2,2000000);
-y0 = sin(x0) * 0.005;
-y1 = ones(1,size(x0, 2)) * handles.ThresthodValue / 1000 /17.7828;
-plot(y0, 'y');
-plot(y1, 'b');
+% x0 = linspace(0,3.1415926*2,2000000);
+% y0 = sin(x0) * 0.005;
+% y1 = ones(1,size(x0, 2)) * handles.ThresthodValue / 1000 /17.7828;
+% plot(y0, 'y');
+% plot(y1, 'b');
 xlim([0 2000000]);
 hold off;
 %% show signals count
@@ -214,7 +228,7 @@ function pushbutton4_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % batch_select();
-n = 2;
+n = 0.03;
 
 set(handles.text_status, 'string', 'Begin Process Data');
 pause(n);
@@ -230,9 +244,17 @@ set(handles.text_status, 'string', 'Find PD');
 pause(n);
 set(handles.text_status, 'string', 'Find NOISE');
 pause(n);
+
+
+%% for simple debug
+filepath = batch_select();
+%filepath = 'F:\局方GUI\data\1.5mm dia 10kv inception\';
+%filepath = 'F:\局方GUI\data\1.5mm small\';
 set(handles.text_status, 'string', 'Finish');
 
 
+handles.filepath = filepath;
+guidata(hObject, handles);
 
 
 
@@ -261,48 +283,88 @@ function pushbutton6_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+%filepath = handles.filepath;
+[filename, filepath] = uigetfile('*');
+pd_all_full_path = [filepath,'pd_all.csv'];
+noise_all_full_path = [filepath,'noise_all.csv'];
+
 % prpd;
 % plot pd data
 axes(handles.axes4);
 %M = csvread('./pd_all.csv');
-M = csvread('F:\局方GUI\data\1.5mm dia 10kv inception\pd_all.csv');
+%M = csvread('F:\局方GUI\data\1.5mm dia 10kv inception\pd_all.csv');
+M = csvread(pd_all_full_path);
+plot(M(:,1), M(:,6) .* M(:,7), 'b.')
 hold on;
-plot(M(:,1), M(:,6) .* M(:,7), 'bo')
 x0 = linspace(0,3.1415926*2,2000000);
 y0 = sin(x0) * 0.005;
 plot(y0, 'y');
 % plot NOISE PRPD
 %M = csvread('./noise_all.csv');
-M = csvread('F:\局方GUI\data\1.5mm dia 10kv inception\noise_all.csv');
+%M = csvread('F:\局方GUI\data\1.5mm dia 10kv inception\noise_all.csv');
+M = csvread(noise_all_full_path);
 plot(M(:,1), M(:,6) .* M(:,7), 'r+')
 xlim([0 2000000]);
 hold off;
 
-% plot positive polar 
+
+% plot positive and negative polar 
 %M = csvread('./pd_all.csv');
-M = csvread('F:\局方GUI\data\1.5mm dia 10kv inception\pd_all.csv');
+M = csvread(pd_all_full_path);
 [pos_loc, pos_val, neg_loc, neg_val] = polarsize(M);
 axes(handles.axes5);
 polar(pos_loc, pos_val, 'b.')
 hold on;
 
-M = csvread('F:\局方GUI\data\1.5mm dia 10kv inception\noise_all.csv');
+M = csvread(noise_all_full_path);
 [pos_loc, pos_val, neg_loc, neg_val] = polarsize(M);
 polar(pos_loc, pos_val, 'r+')
-hold off;
 
-% plot negative polar 
-%M = csvread('./pd_all.csv');
-M = csvread('F:\局方GUI\data\1.5mm dia 10kv inception\pd_all.csv');
+M = csvread(pd_all_full_path);
 [pos_loc, pos_val, neg_loc, neg_val] = polarsize(M);
-axes(handles.axes6);
 polar(neg_loc, neg_val, 'b.')
-hold on;
-
-M = csvread('F:\局方GUI\data\1.5mm dia 10kv inception\noise_all.csv');
+M = csvread(noise_all_full_path);
 [pos_loc, pos_val, neg_loc, neg_val] = polarsize(M);
 polar(neg_loc, neg_val, 'r+')
 hold off;
+
+% get current 
+M = csvread(pd_all_full_path);
+prpd_fp_positive = mean(M(:,6).*M(:,7));
+M = csvread(noise_all_full_path);
+prpd_fp_negative = mean(M(:,6).*M(:,7));
+prpd_fp = [prpd_fp_positive; prpd_fp_negative];
+
+handles.prpd_fp = prpd_fp;
+% Update handles structure
+guidata(hObject, handles);
+
+% plot posive and segative polar separate
+% % plot positive polar 
+% %M = csvread('./pd_all.csv');
+% M = csvread('F:\局方GUI\data\1.5mm dia 10kv inception\pd_all.csv');
+% [pos_loc, pos_val, neg_loc, neg_val] = polarsize(M);
+% axes(handles.axes5);
+% polar(pos_loc, pos_val, 'b.')
+% hold on;
+% 
+% M = csvread('F:\局方GUI\data\1.5mm dia 10kv inception\noise_all.csv');
+% [pos_loc, pos_val, neg_loc, neg_val] = polarsize(M);
+% polar(pos_loc, pos_val, 'r+')
+% hold off;
+% 
+% % plot negative polar 
+% %M = csvread('./pd_all.csv');
+% M = csvread('F:\局方GUI\data\1.5mm dia 10kv inception\pd_all.csv');
+% [pos_loc, pos_val, neg_loc, neg_val] = polarsize(M);
+% axes(handles.axes6);
+% polar(neg_loc, neg_val, 'b.')
+% hold on;
+% 
+% M = csvread('F:\局方GUI\data\1.5mm dia 10kv inception\noise_all.csv');
+% [pos_loc, pos_val, neg_loc, neg_val] = polarsize(M);
+% polar(neg_loc, neg_val, 'r+')
+% hold off;
 
 
 
@@ -461,3 +523,25 @@ function pushbutton10_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 [table_cell] = get_files_status();
 set(handles.tt, 'data', table_cell);
+
+
+% --- Executes on button press in pushbutton11.
+function pushbutton11_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton11 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+M_struc = find_similar_prpd(handles.prpd_fp);
+
+
+axes(handles.axes6);
+hold on;
+M = M_struc.pd_M;
+plot(M(:,1), M(:,2) .* M(:,3), 'b.')
+x0 = linspace(0,3.1415926*2,2000000);
+y0 = sin(x0) * 0.005;
+plot(y0, 'y');
+% plot NOISE PRPD
+M = M_struc.NOISE_M;
+plot(M(:,1), M(:,2) .* M(:,3), 'r+')
+xlim([0 2000000]);
+hold off;
