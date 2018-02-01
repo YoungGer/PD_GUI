@@ -16,7 +16,7 @@ STDVSAverageLog=log10(FormFactor);
 
 % set thresholf value
 if (pre_thre>0)
-    ThresthodValue = pre_thre;
+    ThresthodValue = pre_thre/power_ratio;
 else
     ThresthodValue=1.5*median(abs(data))/0.6745*sqrt(2*log(length(data)))*PeakVSAverageLog;
 end
@@ -138,4 +138,6 @@ SavedSignalForKmeans(index,10)=SavedSignal(index,4);%!!!!!RiseTime，暂时把这个参
         
  end
  
+ 
+ ThresthodValue = ThresthodValue*power_ratio;
 end
