@@ -11,7 +11,7 @@ plot(data);
 hold on;
 
 % plot signals data
-for idx = 1:100
+for idx = 1:max(1000, size(NoShakeSignalStartMaxStop,1))
     if NoShakeSignalStartMaxStop(idx, 2)==0
         break
     end
@@ -26,6 +26,9 @@ for i = 1:length(start_idxs)
     n = end_idxs(i);
     plot(m:n, data(m:n),'r')
 end
+
+handles.start_idxs = start_idxs;
+handles.end_idxs = end_idxs;
 
 
 % plot 20ms data
