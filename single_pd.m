@@ -81,10 +81,10 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 
 %% choose data callback
 
-[filename, filepath] = uigetfile('*');
-full_name = [filepath filename];
+% [filename, filepath] = uigetfile('*');
+% full_name = [filepath filename];
 
-% full_name = 'F:\局方GUI\PDData2\ygy_gui\C2Trace00011.trc';
+full_name = 'F:\局方GUI\PDData2\ygy_gui\C2Trace00011.trc';
 
 % judge if trc or txt
 if strcmp(full_name(length(full_name)-2:length(full_name)), 'trc')
@@ -118,43 +118,20 @@ set(handles.currthre, 'string', num2str(ThresthodValue));
 handles.ThresthodValue = ThresthodValue;
 handles.SavedSignal = SavedSignal;
 handles.data = data;
+handles.NoShakeSignalStartMaxStop = NoShakeSignalStartMaxStop;
 guidata(hObject, handles);
  
 %% plot
 % plot original data
 axes(handles.axes2);
-plot(data);
-hold on;
-% plot signals data
-for idx = 1:100
-    if NoShakeSignalStartMaxStop(idx, 2)==0
-        break
-    end
-end
 
-start_idxs = NoShakeSignalStartMaxStop(1:idx-1, 2);
-end_idxs = NoShakeSignalStartMaxStop(1:idx-1, 8);
+[start_idxs, end_idxs] = plot_orig(data, SavedSignal, NoShakeSignalStartMaxStop, ThresthodValue);
+xlim([0 2000000]);
 
 handles.start_idxs = start_idxs;
 handles.end_idxs = end_idxs;
 guidata(hObject, handles);
 
-for i = 1:length(start_idxs)
-    m = start_idxs(i);
-    n = end_idxs(i);
-    plot(m:n, data(m:n),'r')
-end
-
-% plot 20ms data
-% x0 = linspace(0,3.1415926*2,2000000);
-% y0 = sin(x0) * 0.005;
-% y1 = ones(1,size(x0, 2)) * handles.ThresthodValue / 1000 /17.7828;
-% plot(y0, 'y');
-% plot(y1, 'b');
-thre_20ms = max(abs(SavedSignal(:, 6))) * 1.1;
-plot20ms(thre_20ms);
-plot20ms_thre(ThresthodValue);
-xlim([0 2000000]);
 hold off;
 %% show signals count
 set(handles.text_signal_cnt, 'string', num2str(length(start_idxs)));
@@ -218,6 +195,16 @@ plot(m-100:n+100, handles.data(m-100:n+100),'b')
 hold on;
 plot(m:n, handles.data(m:n),'r')
 hold off;
+
+
+% vertical line
+axes(handles.axes2);
+
+[start_idxs, end_idxs] = plot_orig(handles.data, handles.SavedSignal, handles.NoShakeSignalStartMaxStop, handles.ThresthodValue);
+hold on;
+thre_1pd = max(abs(handles.SavedSignal(:, 6))) * 1.1;
+plot([(m+n)/2, (m+n)/2], [-thre_1pd, thre_1pd],'k--')
+
 
 % save data for handler 
 % similar.fig use
