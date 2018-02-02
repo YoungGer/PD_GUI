@@ -1,4 +1,4 @@
-function [data, SavedSignal, NoShakeSignalStartMaxStop, ThresthodValue] = extract_signal(data, pre_thre)
+function [handles] = extract_signal(data, pre_thre, handles)
 
 %% extract signals
 power_ratio = 1/17.7828;  % -25db channel 2
@@ -137,7 +137,12 @@ SavedSignalForKmeans(index,10)=SavedSignal(index,4);%!!!!!RiseTime，暂时把这个参
              
         
  end
- 
- 
- ThresthodValue = ThresthodValue*power_ratio;
+
+
+ThresthodValue = ThresthodValue*power_ratio;
+
+handles.ThresthodValue = ThresthodValue;
+handles.SavedSignal = SavedSignal;
+handles.data = data;
+handles.NoShakeSignalStartMaxStop = NoShakeSignalStartMaxStop;
 end

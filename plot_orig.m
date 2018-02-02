@@ -1,7 +1,15 @@
-function [start_idxs, end_idxs] = plot_orig(data, SavedSignal, NoShakeSignalStartMaxStop, ThresthodValue)
+function [handles] = plot_orig(handles)
+
+data = handles.data;
+SavedSignal = handles.SavedSignal;
+NoShakeSignalStartMaxStop = handles.NoShakeSignalStartMaxStop;
+ThresthodValue = handles.ThresthodValue;
+
+
 hold off;
 plot(data);
 hold on;
+
 % plot signals data
 for idx = 1:100
     if NoShakeSignalStartMaxStop(idx, 2)==0
@@ -31,4 +39,8 @@ plot20ms(thre_20ms);
 plot20ms_thre(ThresthodValue);
 xlim([0 2000000]);
 hold off;
+
+
+handles.start_idxs = start_idxs;
+handles.end_idxs = end_idxs;
 end
