@@ -1,9 +1,6 @@
-function [data] = read_pd_data()
+function [data] = read_pd_data(full_name)
 
-% [filename, filepath] = uigetfile('*');
-% full_name = [filepath filename];
 
-full_name = 'F:\¾Ö·½GUI\PDData2\ygy_gui\C2Trace00011.trc';
 
 % judge if trc or txt
 if strcmp(full_name(length(full_name)-2:length(full_name)), 'trc')

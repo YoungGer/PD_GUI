@@ -1,0 +1,5 @@
+*.csv
+*.asv
+data/*
+ygy_gui/*
+.DS_Store

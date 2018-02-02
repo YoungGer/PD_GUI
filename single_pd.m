@@ -80,7 +80,11 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 %% read data
-[data] = read_pd_data();
+[filename, filepath] = uigetfile('*');
+full_name = [filepath filename];
+%full_name = 'F:\¾Ö·½GUI\PDData2\ygy_gui\C2Trace00011.trc';
+handles.full_name = full_name;
+[data] = read_pd_data(full_name);
 
 %% extract signal
 pre_thre = str2double(get(handles.thre, 'string'));
@@ -99,35 +103,7 @@ b = 1:length(handles.start_idxs);
 set(handles.popupmenu1, 'string',  num2str(b'));
 
 %% prepare statis
-l_rise_time = handles.SavedSignal(:, 4);
-l_loc = handles.SavedSignal(:, 1);
-l_flag = handles.SavedSignal(:, 7);
-l_pv = handles.SavedSignal(:, 6);
-l_t = handles.SavedSignal(:, 17);
-l_w = handles.SavedSignal(:, 18);
-
-% normal pic
-axes(handles.axes4);
-plot(l_loc, l_flag.*l_pv, '.')
-plot20ms(5)
-xlabel('PD Location')
-ylabel('Peak Voltage')
-
-
-% polar pic
-axes(handles.axes5);
-polar(l_loc, l_flag.*l_pv, '.')
-
-% rise_time
-axes(handles.axes6);
-hist(l_rise_time)
-xlabel('Rise Time')
-
-% tw mapping
-axes(handles.axes7);
-plot(l_t, l_w, '.')
-xlabel('T')
-ylabel('W')
+[handles] = plot_statis(handles)
 
 guidata(hObject, handles);
 
@@ -224,3 +200,26 @@ function pushbutton4_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton4 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+[data] = read_pd_data(handles.full_name);
+
+%% extract signal
+pre_thre = str2double(get(handles.thre, 'string'));
+[handles] = extract_signal(data, pre_thre, handles);
+
+set(handles.currthre, 'string', num2str(handles.ThresthodValue));
+
+
+%% plot original data
+axes(handles.axes2);
+[handles] = plot_orig(handles);
+
+set(handles.text_signal_cnt, 'string', num2str(length(handles.start_idxs)));
+
+b = 1:length(handles.start_idxs);
+set(handles.popupmenu1, 'string',  num2str(b'));
+
+%% prepare statis
+[handles] = plot_statis(handles)
+
+guidata(hObject, handles);
