@@ -22,7 +22,7 @@ function varargout = single_pd_mtx(varargin)
 
 % Edit the above text to modify the response to help single_pd_mtx
 
-% Last Modified by GUIDE v2.5 02-Feb-2018 16:06:38
+% Last Modified by GUIDE v2.5 03-Feb-2018 10:26:03
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -79,6 +79,7 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+% ¿ªÊ¼----------------------------------------------------------------------------------------------------------------------------------------------------------
 %% read data
 [filename, filepath] = uigetfile('*');
 full_name = [filepath filename];
@@ -112,9 +113,9 @@ l_t = handles.SavedSignal(:, 17);
 l_w = handles.SavedSignal(:, 18);
 
 % normal pic
-axes(handles.axes4);
+axes(handles.axes7);
 plot(l_loc, l_flag.*l_pv, '.')
-plot20ms(5)
+plot20ms(max(abs(handles.SavedSignal(:, 6))) * 1.1)
 xlabel('PD Location')
 ylabel('Peak Voltage')
 
@@ -123,6 +124,10 @@ ylabel('Peak Voltage')
 labels = char('rise_time', 'peak_voltage',  't', 'w', 'loc');
 set(handles.pop_xlabel, 'string', labels);
 set(handles.pop_ylabel, 'string', labels);
+set(handles.pop_bar, 'string', labels);
+set(handles.fu1, 'string', labels);
+set(handles.fu2, 'string', labels);
+set(handles.fu3, 'string', labels);
 
 select_idx = zeros(size(handles.SavedSignal, 1),1)==1 ;
 handles.select_idx = select_idx;
@@ -155,8 +160,8 @@ axes(handles.axes2);
 
 [handles] = plot_orig(handles);
 hold on;
-thre_1pd = max(abs(handles.SavedSignal(:, 6))) * 1.1;
-plot([(m+n)/2, (m+n)/2], [-thre_1pd, thre_1pd],'k--')
+thre_1pd = max(abs(handles.SavedSignal(:, 6))) * 1.3;
+plot([(m+n)/2, (m+n)/2], [-thre_1pd, thre_1pd],'k--','Linewidth',3)
 hold off;
 
 % save data for handler 
@@ -220,6 +225,7 @@ function pushbutton4_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+% Ë¢ÐÂ---------------------------------------------------------------------------------------------------------------------------------------
 
 [data] = read_pd_data(handles.full_name);
 
@@ -242,25 +248,29 @@ set(handles.popupmenu1, 'string',  num2str(b'));
 
 
 %% get idx of select data point
-% pv_low, pv_high
-pv_low = str2num(get(handles.pv_low, 'string'));
-pv_high = str2num(get(handles.pv_high, 'string'));
-rt_low = str2num(get(handles.rt_low, 'string'));
-rt_high = str2num(get(handles.rt_high, 'string'));
+% % pv_low, pv_high
+% pv_low = str2num(get(handles.pv_low, 'string'));
+% pv_high = str2num(get(handles.pv_high, 'string'));
+% rt_low = str2num(get(handles.rt_low, 'string'));
+% rt_high = str2num(get(handles.rt_high, 'string'));
+% 
+% 
+% select_idx = ones(size(handles.SavedSignal, 1),1)==1 ;
+% if pv_low~=-1 & pv_high~=-1
+%     pv_idx = handles.SavedSignal(:, 6)>pv_low & handles.SavedSignal(:, 6)<pv_high;
+%     select_idx = select_idx & pv_idx;
+% end
+% if rt_low~=-1 & rt_high~=-1
+%     rt_idx = handles.SavedSignal(:, 4)>rt_low & handles.SavedSignal(:, 4)<rt_high;
+%     select_idx = select_idx & rt_idx;
+% end
+% if pv_low==-1 & rt_low==-1
+%     select_idx = zeros(size(handles.SavedSignal, 1),1)==1 ;
+% end
 
+%'rise_time', 'peak_voltage',  't', 'w', 'loc'
+[select_idx] = get_select_idx_from_popmenu(handles);
 
-select_idx = ones(size(handles.SavedSignal, 1),1)==1 ;
-if pv_low~=-1 & pv_high~=-1
-    pv_idx = handles.SavedSignal(:, 6)>pv_low & handles.SavedSignal(:, 6)<pv_high;
-    select_idx = select_idx & pv_idx;
-end
-if rt_low~=-1 & rt_low~=-1
-    rt_idx = handles.SavedSignal(:, 4)>rt_low & handles.SavedSignal(:, 4)<rt_high;
-    select_idx = select_idx & rt_idx;
-end
-if pv_low==-1 & rt_low==-1
-    select_idx = zeros(size(handles.SavedSignal, 1),1)==1 ;
-end
 handles.select_idx = select_idx;
 
 %% plot select data point
@@ -282,6 +292,7 @@ hold off;
 plot_statis_mtx(handles);
 % xlabel('PD Location')
 % ylabel('Peak Voltage')
+
 
 guidata(hObject, handles);
 
@@ -420,6 +431,258 @@ function rt_high_CreateFcn(hObject, eventdata, handles)
 % handles    empty - handles not created until after all CreateFcns called
 
 % Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in pop_bar.
+function pop_bar_Callback(hObject, eventdata, handles)
+% hObject    handle to pop_bar (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns pop_bar contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from pop_bar
+
+% single bar plot call
+% ----------------------------------------------------------------------------------------------------------------------------
+idx = get(handles.pop_bar, 'Value');
+
+l_flag = handles.SavedSignal(:, 7);
+l_rise_time = handles.SavedSignal(:, 4);
+l_loc = handles.SavedSignal(:, 1);
+l_pv = handles.SavedSignal(:, 6) .* l_flag;
+l_t = handles.SavedSignal(:, 17);
+l_w = handles.SavedSignal(:, 18);
+
+c = containers.Map;
+c('1') = l_rise_time;
+c('2') = l_pv;
+c('3') = l_t;
+c('4') = l_w;
+c('5') = l_loc;
+
+axes(handles.axes8);
+hist(c(num2str(idx)));
+
+
+
+% --- Executes during object creation, after setting all properties.
+function pop_bar_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to pop_bar (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function fu1_low_Callback(hObject, eventdata, handles)
+% hObject    handle to fu1_low (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of fu1_low as text
+%        str2double(get(hObject,'String')) returns contents of fu1_low as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function fu1_low_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to fu1_low (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function fu1_high_Callback(hObject, eventdata, handles)
+% hObject    handle to fu1_high (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of fu1_high as text
+%        str2double(get(hObject,'String')) returns contents of fu1_high as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function fu1_high_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to fu1_high (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in fu1.
+function fu1_Callback(hObject, eventdata, handles)
+% hObject    handle to fu1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns fu1 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from fu1
+
+
+% --- Executes during object creation, after setting all properties.
+function fu1_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to fu1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function fu2_low_Callback(hObject, eventdata, handles)
+% hObject    handle to fu2_low (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of fu2_low as text
+%        str2double(get(hObject,'String')) returns contents of fu2_low as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function fu2_low_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to fu2_low (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function fu2_high_Callback(hObject, eventdata, handles)
+% hObject    handle to fu2_high (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of fu2_high as text
+%        str2double(get(hObject,'String')) returns contents of fu2_high as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function fu2_high_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to fu2_high (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in fu2.
+function fu2_Callback(hObject, eventdata, handles)
+% hObject    handle to fu2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns fu2 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from fu2
+
+
+% --- Executes during object creation, after setting all properties.
+function fu2_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to fu2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function fu3_low_Callback(hObject, eventdata, handles)
+% hObject    handle to fu3_low (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of fu3_low as text
+%        str2double(get(hObject,'String')) returns contents of fu3_low as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function fu3_low_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to fu3_low (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function fu3_high_Callback(hObject, eventdata, handles)
+% hObject    handle to fu3_high (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of fu3_high as text
+%        str2double(get(hObject,'String')) returns contents of fu3_high as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function fu3_high_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to fu3_high (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in fu3.
+function fu3_Callback(hObject, eventdata, handles)
+% hObject    handle to fu3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns fu3 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from fu3
+
+
+% --- Executes during object creation, after setting all properties.
+function fu3_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to fu3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
