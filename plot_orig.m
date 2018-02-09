@@ -3,6 +3,7 @@ function [handles] = plot_orig(handles)
 data = handles.data;
 SavedSignal = handles.SavedSignal;
 NoShakeSignalStartMaxStop = handles.NoShakeSignalStartMaxStop;
+ShakeSignalStartMaxStop = handles.ShakeSignalStartMaxStop;
 ThresthodValue = handles.ThresthodValue;
 
 
@@ -30,6 +31,23 @@ end
 handles.start_idxs = start_idxs;
 handles.end_idxs = end_idxs;
 
+% plot shake signal data
+for idx = 1:max(1000, size(ShakeSignalStartMaxStop,1))
+    if ShakeSignalStartMaxStop(idx, 2)==0
+        break
+    end
+end
+
+start_idxs = ShakeSignalStartMaxStop(1:idx-1, 2);
+end_idxs = ShakeSignalStartMaxStop(1:idx-1, 4);
+
+
+for i = 1:length(start_idxs)
+    m = start_idxs(i);
+    n = end_idxs(i);
+    plot(m:n, data(m:n),'k')
+end
+
 
 % plot 20ms data
 % x0 = linspace(0,3.1415926*2,2000000);
@@ -44,6 +62,6 @@ xlim([0 2000000]);
 hold off;
 
 
-handles.start_idxs = start_idxs;
-handles.end_idxs = end_idxs;
+% handles.start_idxs = start_idxs;
+% handles.end_idxs = end_idxs;
 end

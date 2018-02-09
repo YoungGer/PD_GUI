@@ -145,4 +145,5 @@ handles.ThresthodValue = ThresthodValue;
 handles.SavedSignal = SavedSignal;
 handles.data = data;
 handles.NoShakeSignalStartMaxStop = NoShakeSignalStartMaxStop;
+handles.ShakeSignalStartMaxStop = ShakeSignalStartMaxStop;
 end
