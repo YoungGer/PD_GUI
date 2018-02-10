@@ -168,6 +168,7 @@ hold off;
 % save data for handler 
 % similar.fig use
 handles.a = handles.SavedSignal(idx,:);
+handles.b = handles.data(m-100:n+100);
 guidata(hObject, handles);
 
 % --- Executes during object creation, after setting all properties.
@@ -188,6 +189,8 @@ function pushbutton2_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+dlmwrite('F:\局方GUI\data_lib\pd_lib.csv', [handles.a,handles.b'], 'delimiter',',','-append');
+
 
 
 % --- Executes on button press in pushbutton3.
@@ -195,7 +198,7 @@ function pushbutton3_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton3 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+dlmwrite('F:\局方GUI\data_lib\noise_lib.csv', [handles.a,handles.b'], 'delimiter',',','-append');
 
 
 function thre_Callback(hObject, eventdata, handles)
