@@ -66,14 +66,14 @@ set(handles.tt, 'data', table_cell);
 
 % show image
 
-axes(handles.axes1); 
-imshow(imread('./analysis.jpg'));
-axes(handles.axes2); 
-imshow(imread('./prpd.jpg'));
-axes(handles.axes3); 
-imshow(imread('./pd.jpg'));
-axes(handles.axes4); 
-imshow(imread('./noise.jpg'));
+% axes(handles.axes1); 
+% imshow(imread('./analysis.jpg'));
+% axes(handles.axes2); 
+% imshow(imread('./prpd.jpg'));
+% axes(handles.axes3); 
+% imshow(imread('./pd.jpg'));
+% axes(handles.axes4); 
+% imshow(imread('./noise.jpg'));
 
 
 % --- Outputs from this function are returned to the command line.

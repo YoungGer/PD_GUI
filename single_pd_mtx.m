@@ -22,7 +22,7 @@ function varargout = single_pd_mtx(varargin)
 
 % Edit the above text to modify the response to help single_pd_mtx
 
-% Last Modified by GUIDE v2.5 03-Feb-2018 10:26:03
+% Last Modified by GUIDE v2.5 23-Feb-2018 19:59:31
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -691,3 +691,32 @@ function fu3_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on button press in pushbutton5.
+function pushbutton5_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton5 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% recognize
+
+l_rise_time = handles.SavedSignal(:, 4);
+l_loc = handles.SavedSignal(:, 1);
+l_flag = handles.SavedSignal(:, 7);
+l_pv = handles.SavedSignal(:, 6);
+l_t = handles.SavedSignal(:, 17);
+l_w = handles.SavedSignal(:, 18);
+
+% normal pic
+axes(handles.axes7);
+plot(l_loc, l_flag.*l_pv, '.')
+hold on;
+% plot noise 
+max_pv = max(l_pv);
+idx = find(l_pv./max_pv < 0.2);
+plot(l_loc(idx), l_flag(idx).*l_pv(idx), 'r.')
+plot20ms(max(abs(handles.SavedSignal(:, 6))) * 1.1)
+xlabel('PD Location')
+ylabel('Peak Voltage')
+hold off;
