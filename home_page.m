@@ -55,6 +55,16 @@ function home_page_OpeningFcn(hObject, eventdata, handles, varargin)
 % Choose default command line output for home_page
 handles.output = hObject;
 
+
+% add background
+% ha=axes('units','normalized','pos',[0 0 1 1]);
+% uistack(ha,'down');
+% ii=imread('b2.jpg');
+% image(ii);
+% colormap gray
+% set(ha,'handlevisibility','off','visible','off');
+
+
 % Update handles structure
 guidata(hObject, handles);
 
