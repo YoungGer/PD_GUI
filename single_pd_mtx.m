@@ -700,23 +700,26 @@ function pushbutton5_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % recognize
+% 
+% l_rise_time = handles.SavedSignal(:, 4);
+% l_loc = handles.SavedSignal(:, 1);
+% l_flag = handles.SavedSignal(:, 7);
+% l_pv = handles.SavedSignal(:, 6);
+% l_t = handles.SavedSignal(:, 17);
+% l_w = handles.SavedSignal(:, 18);
+% 
+% % normal pic
+% axes(handles.axes7);
+% plot(l_loc, l_flag.*l_pv, '.')
+% hold on;
+% % plot noise 
+% max_pv = max(l_pv);
+% idx = find(l_pv./max_pv < 0.2);
+% plot(l_loc(idx), l_flag(idx).*l_pv(idx), 'r.')
+% plot20ms(max(abs(handles.SavedSignal(:, 6))) * 1.1)
+% xlabel('PD Location')
+% ylabel('Peak Voltage')
+% hold off;
 
-l_rise_time = handles.SavedSignal(:, 4);
-l_loc = handles.SavedSignal(:, 1);
-l_flag = handles.SavedSignal(:, 7);
-l_pv = handles.SavedSignal(:, 6);
-l_t = handles.SavedSignal(:, 17);
-l_w = handles.SavedSignal(:, 18);
+dlmwrite('F:\¾Ö·ÅGUI\data_lib\pd_lib.csv', handles.SavedSignal, 'delimiter',',','-append');
 
-% normal pic
-axes(handles.axes7);
-plot(l_loc, l_flag.*l_pv, '.')
-hold on;
-% plot noise 
-max_pv = max(l_pv);
-idx = find(l_pv./max_pv < 0.2);
-plot(l_loc(idx), l_flag(idx).*l_pv(idx), 'r.')
-plot20ms(max(abs(handles.SavedSignal(:, 6))) * 1.1)
-xlabel('PD Location')
-ylabel('Peak Voltage')
-hold off;

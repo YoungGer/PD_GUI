@@ -22,7 +22,7 @@ function varargout = files_analysis(varargin)
 
 % Edit the above text to modify the response to help files_analysis
 
-% Last Modified by GUIDE v2.5 10-Feb-2018 15:58:46
+% Last Modified by GUIDE v2.5 31-Mar-2018 16:17:37
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -219,3 +219,10 @@ hist(c(num2str(idx)));
 set(handles.text3, 'string', num2str(size(l_rise_time,1)));
 
 guidata(hObject, handles);
+
+
+% --- Executes on button press in pushbutton3.
+function pushbutton3_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
