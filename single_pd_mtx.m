@@ -83,9 +83,9 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 %% read data
 [filename, filepath] = uigetfile('*');
 full_name = [filepath filename];
-%full_name = 'F:\局方GUI\PDData2\data\C1_12EG018A002__2012_06_14_12_07_38.txt';
-% full_name = 'F:\局方GUI\PDData2\ygy_gui\C2Trace00011.trc';
-%full_name = 'F:\局方GUI\data\1.5mm 11kv inception\C2Trace00006.trc';
+%full_name = 'F:\局放GUI\PDData2\data\C1_12EG018A002__2012_06_14_12_07_38.txt';
+%full_name = 'F:\局放GUI\data\small2\C2Trace00016.trc';
+%full_name = 'F:\局放GUI\data\1.5mm 11kv inception\C2Trace00006.trc';
 handles.full_name = full_name;
 [data] = read_pd_data(full_name);
 
@@ -189,7 +189,7 @@ function pushbutton2_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-dlmwrite('F:\局方GUI\data_lib\pd_lib.csv', [handles.a,handles.b'], 'delimiter',',','-append');
+dlmwrite('F:\局放GUI\data_lib\pd_lib.csv', [handles.a,handles.b'], 'delimiter',',','-append');
 
 
 
@@ -198,7 +198,7 @@ function pushbutton3_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton3 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-dlmwrite('F:\局方GUI\data_lib\noise_lib.csv', [handles.a,handles.b'], 'delimiter',',','-append');
+dlmwrite('F:\局放GUI\data_lib\noise_lib.csv', [handles.a,handles.b'], 'delimiter',',','-append');
 
 
 function thre_Callback(hObject, eventdata, handles)

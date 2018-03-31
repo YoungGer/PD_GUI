@@ -216,4 +216,6 @@ axes(handles.axes3);
 idx = get(handles.pop_bar, 'Value');
 hist(c(num2str(idx)));
 
+set(handles.text3, 'string', num2str(size(l_rise_time,1)));
+
 guidata(hObject, handles);

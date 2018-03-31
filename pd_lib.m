@@ -22,7 +22,7 @@ function varargout = pd_lib(varargin)
 
 % Edit the above text to modify the response to help pd_lib
 
-% Last Modified by GUIDE v2.5 10-Feb-2018 10:15:25
+% Last Modified by GUIDE v2.5 30-Mar-2018 10:15:46
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -208,7 +208,7 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 
 %% get data
 % refresh callback
-M = csvread('F:\局方GUI\data_lib\pd_lib.csv');
+M = csvread('F:\局放GUI\data_lib\pd_lib.csv');
 N = size(M, 1);
 
 % set num count
@@ -242,3 +242,20 @@ plot20ms(max(l_pv)*1.3);
 
 
 guidata(hObject, handles);
+
+
+% --- Executes on button press in pushbutton2.
+function pushbutton2_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% delete 
+M = handles.M;
+N = size(M, 1);
+
+row_idx = get(handles.popupmenu1, 'Value');
+
+M(row_idx,:) = [];
+
+dlmwrite('F:\局放GUI\data_lib\pd_lib.csv', M, 'delimiter',',');
