@@ -1,3 +1,5 @@
+function rst = database_status()
+
 main_path = 'D:\PDData';
 
 dir0 = dir(main_path);
@@ -48,4 +50,7 @@ for i0 = 3:size(dir0,1)
           
         end
     end
+end
+
+
 end

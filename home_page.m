@@ -22,7 +22,7 @@ function varargout = home_page(varargin)
 
 % Edit the above text to modify the response to help home_page
 
-% Last Modified by GUIDE v2.5 10-Feb-2018 16:00:33
+% Last Modified by GUIDE v2.5 24-Apr-2018 19:52:02
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -57,12 +57,12 @@ handles.output = hObject;
 
 
 % add background
-% ha=axes('units','normalized','pos',[0 0 1 1]);
-% uistack(ha,'down');
-% ii=imread('b2.jpg');
-% image(ii);
-% colormap gray
-% set(ha,'handlevisibility','off','visible','off');
+ha=axes('units','normalized','pos',[0 0 1 1]);
+uistack(ha,'down');
+ii=imread('hp1.png');
+image(ii);
+colormap gray
+set(ha,'handlevisibility','off','visible','off');
 
 
 % Update handles structure
@@ -71,8 +71,9 @@ guidata(hObject, handles);
 % UIWAIT makes home_page wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 % show files stats
-[table_cell] = get_files_status();
-set(handles.tt, 'data', table_cell);
+
+% [table_cell] = get_files_status();
+% set(handles.tt, 'data', table_cell);
 
 % show image
 
@@ -98,14 +99,14 @@ varargout{1} = handles.output;
 
 
 % --- Executes on button press in pushbutton1.
-function pushbutton1_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% show files stats
-[table_cell] = get_files_status();
-set(handles.tt, 'data', table_cell);
+% function pushbutton1_Callback(hObject, eventdata, handles)
+% % hObject    handle to pushbutton1 (see GCBO)
+% % eventdata  reserved - to be defined in a future version of MATLAB
+% % handles    structure with handles and user data (see GUIDATA)
+% 
+% % show files stats
+% [table_cell] = get_files_status();
+% set(handles.tt, 'data', table_cell);
 
 % --- Executes on button press in pushbutton2.
 function pushbutton2_Callback(hObject, eventdata, handles)
@@ -134,3 +135,11 @@ function pushbutton5_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 pd_lib;
+
+
+% --- Executes on button press in pushbutton6.
+function pushbutton6_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton6 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+data_overview

@@ -55,6 +55,14 @@ function single_pd_mtx_OpeningFcn(hObject, eventdata, handles, varargin)
 % Choose default command line output for single_pd_mtx
 handles.output = hObject;
 
+% % add background
+% ha=axes('units','normalized','pos',[0 0 1 1]);
+% uistack(ha,'down');
+% ii=imread('hp2.png');
+% image(ii);
+% colormap gray
+% set(ha,'handlevisibility','off','visible','off');
+
 % Update handles structure
 guidata(hObject, handles);
 
@@ -134,6 +142,13 @@ select_idx = zeros(size(handles.SavedSignal, 1),1)==1 ;
 handles.select_idx = select_idx;
 guidata(hObject, handles);
 
+%% dual-polarsize
+[pos_loc, pos_val, neg_loc, neg_val] = polarsize2(l_loc, l_pv, l_flag)
+axes(handles.axes9);
+polar(pos_loc, pos_val, 'bo')
+hold on;
+polar(neg_loc, neg_val, 'rx')
+hold off;
 
 % --- Executes on selection change in popupmenu1.
 function popupmenu1_Callback(hObject, eventdata, handles)

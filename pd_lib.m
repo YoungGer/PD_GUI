@@ -54,7 +54,7 @@ function pd_lib_OpeningFcn(hObject, eventdata, handles, varargin)
 
 % Choose default command line output for pd_lib
 handles.output = hObject;
-
+handles.M = csvread('F:\¾Ö·ÅGUI\data_lib\pd_lib.csv');
 % Update handles structure
 guidata(hObject, handles);
 

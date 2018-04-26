@@ -22,7 +22,7 @@ function varargout = files_analysis(varargin)
 
 % Edit the above text to modify the response to help files_analysis
 
-% Last Modified by GUIDE v2.5 31-Mar-2018 16:17:37
+% Last Modified by GUIDE v2.5 01-Apr-2018 10:12:52
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -165,8 +165,10 @@ function pushbutton2_Callback(hObject, eventdata, handles)
 
 % choose data callback, get features
 [filename, filepath] = uigetfile('*');
+%filepath = 'F:\¾Ö·ÅGUI\data\small2\';
 files = dir(filepath);
 features = [];
+pulses = {};
 %full_names = [];
 for i = 3:size(files,1)
     % get full_name 
@@ -176,9 +178,17 @@ for i = 3:size(files,1)
     % get data
     [data] = read_pd_data(full_name);
     % get features
-    [feature] = extract_signal2(data, -1);
+    [feature, data_cell] = extract_signal2(data, -1);
     features = [features; feature];
+    pulses = [pulses, data_cell];
 end
+
+handles.pulses = pulses;
+
+% set popupmenu
+b = 1:length(pulses);
+set(handles.popupmenu7, 'string',  num2str(b'));
+
 
 %save('features','features');
 %load('features.mat')
@@ -220,9 +230,60 @@ set(handles.text3, 'string', num2str(size(l_rise_time,1)));
 
 guidata(hObject, handles);
 
+%% polar plot
+[pos_loc, pos_val, neg_loc, neg_val] = polarsize2(l_loc, l_pv, l_flag);
+axes(handles.axes5);
+polar(pos_loc, pos_val, 'bo');
+hold on;
+polar(neg_loc, neg_val, 'rx');
+hold off;
 
 % --- Executes on button press in pushbutton3.
 function pushbutton3_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on selection change in popupmenu7.
+function popupmenu7_Callback(hObject, eventdata, handles)
+% hObject    handle to popupmenu7 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns popupmenu7 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from popupmenu7
+idx = get(handles.popupmenu7, 'Value');
+data = cell2mat(handles.pulses(idx));
+N = length(data);
+axes(handles.axes4);
+plot(1:N, data,'b')
+hold on;
+plot(1+100:N-100, data(101:N-100),'r');
+hold off;
+
+% --- Executes during object creation, after setting all properties.
+function popupmenu7_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to popupmenu7 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in pushbutton4.
+function pushbutton4_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton4 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in pushbutton5.
+function pushbutton5_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton5 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
