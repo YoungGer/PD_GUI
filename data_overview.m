@@ -22,7 +22,7 @@ function varargout = data_overview(varargin)
 
 % Edit the above text to modify the response to help data_overview
 
-% Last Modified by GUIDE v2.5 08-May-2018 09:24:32
+% Last Modified by GUIDE v2.5 08-May-2018 15:29:53
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -110,3 +110,18 @@ function single_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 single_pd_mtx;
+
+
+% --- Executes on button press in pushbutton3.
+function pushbutton3_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+full_name = handles.file_path;
+
+save_name = full_name{1};
+save_name(1)='F';
+save_name(length(save_name)-2:length(save_name))='fig';
+
+%savefig(save_name);
+openfig(save_name)
