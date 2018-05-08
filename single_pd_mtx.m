@@ -89,8 +89,17 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 
 % 开始----------------------------------------------------------------------------------------------------------------------------------------------------------
 %% read data
-[filename, filepath] = uigetfile('*');
-full_name = [filepath filename];
+file_path = getappdata(0,'file_path');
+size_file_path = size(file_path);
+
+if (size_file_path(1)==0)
+    [filename, filepath] = uigetfile('*');
+    full_name = [filepath filename];
+else
+    full_name = file_path{1};
+end
+    
+
 %full_name = 'F:\局放GUI\PDData2\data\C1_12EG018A002__2012_06_14_12_07_38.txt';
 %full_name = 'F:\局放GUI\data\small2\C2Trace00016.trc';
 %full_name = 'F:\局放GUI\data\1.5mm 11kv inception\C2Trace00006.trc';

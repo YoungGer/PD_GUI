@@ -22,7 +22,7 @@ function varargout = data_overview(varargin)
 
 % Edit the above text to modify the response to help data_overview
 
-% Last Modified by GUIDE v2.5 24-Apr-2018 19:49:24
+% Last Modified by GUIDE v2.5 08-May-2018 09:24:32
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -79,4 +79,34 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 [table_cell] = database_status();
-set(handles.tt, 'data', table_cell);
+set(handles.tt, 'data', table_cell(:,1:7));  % 前4个是地点，第5个文件，第6，7是系统，人工标注的放电个数，8 is location
+handles.table_cell = table_cell;
+guidata(hObject, handles);
+
+
+% --- Executes when selected cell(s) is changed in tt.
+function tt_CellSelectionCallback(hObject, eventdata, handles)
+% hObject    handle to tt (see GCBO)
+% eventdata  structure with the following fields (see UITABLE)
+%	Indices: row and column indices of the cell(s) currently selecteds
+% handles    structure with handles and user data (see GUIDATA)
+
+%display(eventdata.Indices);
+t_row = eventdata.Indices(1);
+t_col = eventdata.Indices(1);
+handles.t_row = t_row;
+handles.t_col = t_col;
+
+table_cell = handles.table_cell;
+file_path = table_cell(t_row,8)
+handles.file_path = file_path;
+setappdata(0, 'file_path', file_path);
+guidata(hObject, handles);
+
+
+% --- Executes on button press in single.
+function single_Callback(hObject, eventdata, handles)
+% hObject    handle to single (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+single_pd_mtx;
