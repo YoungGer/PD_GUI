@@ -1,56 +1,8 @@
-% 得到所有特征，包含T,W,location,peak_voltage,polarity
-% choose data callback, get features
+function [pd] = classify_pd_human(features, handles)
 
-main_path = 'E:\PDData\t1\t2\t3\t4';
-dir0 = dir(main_path);
-% iterate Hunterson
-features = [];
-pulses = {};
-for i0 = 3:size(dir0,1)
-    name1 = dir0(i0).name;
-    full_name = fullfile(main_path, dir0(i0).name);  %file
-    % get data
-    [data] = read_pd_data(full_name);
-    % get features
-    [feature, data_cell] = extract_signal2(data, -1);
-    features = [features; feature];
-    %pulses = [pulses, data_cell];
-end
-    
+pd =0
+load('features.mat');
 
-[filename, filepath] = uigetfile('*');
-%filepath = 'F:\局放GUI\data\small2\';
-files = dir(filepath);
-features = [];
-pulses = {};
-%full_names = [];
-for i = 3:size(files,1)
-    % get full_name 
-    file_name = files(i).name;
-    full_name = [filepath file_name];
-    %full_names = [full_names, full_name];
-    % get data
-    [data] = read_pd_data(full_name);
-    % get features
-    [feature, data_cell] = extract_signal2(data, -1);
-    features = [features; feature];
-    pulses = [pulses, data_cell];
-end
-
-load('test_features')
- 
-
-%% test prpd
-
-i0 = 8;
-name1 = dir0(i0).name;
-full_name = fullfile(main_path, dir0(i0).name);  %file
-% get data
-[data] = read_pd_data(full_name);
-% get features
-[feature, data_cell] = extract_signal2(data, -1);
-    
-features = feature;
 l_rise_time = features(:, 4);
 l_loc = features(:, 1);
 l_flag = features(:, 7);
@@ -59,12 +11,12 @@ l_t = features(:, 17);
 l_w = features(:, 18);
 l_tw = [l_t, l_w];
 
-plot(l_loc, l_pv.*l_flag, '.')
 
 % TW聚类
 k = 3;
 color_l = ['r.', 'b.', 'y.', 'm.', 'c.'];
 [idx, ctrs] = kmeans(l_tw, k);
+axes(handles.axes10);
 for i = 1:k
     hold on;
     plot(l_tw(idx==i, 1), l_tw(idx==i, 2), color_l(i*2-1:i*2));
@@ -103,10 +55,17 @@ for i = 1:k
         neg_ctr_pv = mean(neg_pv);
         if (abs(pos_ctr_theta-neg_ctr_theta)/2/pi<0.314)
            display('!!!pd') ;
+           pd = 1;
         end
 
         % plot
-        figure;
+        if (i==1)
+            axes(handles.axes1);
+        elseif (i==2)
+            axes(handles.axes4);
+        else
+            axes(handles.axes7);
+        end
         polar(pos_theta, pos_pv, 'b.')
         hold on;
         polar(pos_ctr_theta, pos_ctr_pv, 'bo' )
@@ -126,7 +85,13 @@ for i = 1:k
         [pos_idx2, pos_ctrs2] = kmeans([pos_theta, pos_pv], 2);
         [neg_idx2, neg_ctrs2] = kmeans([neg_theta, neg_pv], 2);
 
-        figure;
+        if (i==1)
+            axes(handles.axes2);
+        elseif (i==2)
+            axes(handles.axes5);
+        else
+            axes(handles.axes8);
+        end
         polar(pos_theta(pos_idx2==1), pos_pv(pos_idx2==1), 'b.')
         hold on;
         polar(pos_ctrs2(1,1), pos_ctrs2(1,2), 'bo' )
@@ -149,6 +114,7 @@ for i = 1:k
             ((abs(pos_ctrs2(1)-pos_ctrs2(2))/2/pi<0.314/3) |(abs(pos_ctrs2(1)-pos_ctrs2(2))/2/pi<0.314/2) ) & ...
             ((abs(neg_ctrs2(1)-neg_ctrs2(2))/2/pi<0.314/3) |(abs(neg_ctrs2(1)-neg_ctrs2(2))/2/pi<0.314/2) )
            display('!!!pd') 
+           pd = 1;
         end
     end
 
@@ -161,7 +127,13 @@ for i = 1:k
         [pos_idx3, pos_ctrs3] = kmeans([pos_theta, pos_pv], 3);
         [neg_idx3, neg_ctrs3] = kmeans([neg_theta, neg_pv], 3);
 
-        figure;
+        if (i==1)
+            axes(handles.axes3);
+        elseif (i==2)
+            axes(handles.axes6);
+        else
+            axes(handles.axes9);
+        end
         polar(pos_theta(pos_idx3==1), pos_pv(pos_idx3==1), 'b.')
         hold on;
         polar(pos_ctrs3(1,1), pos_ctrs3(1,2), 'bo' )
@@ -192,14 +164,17 @@ for i = 1:k
             ((abs(neg_ctrs3(1)-neg_ctrs3(2))/2/pi<0.314/3) |(abs(neg_ctrs3(1)-neg_ctrs3(2))/2/pi<0.314/2) ) & ...
             ((abs(neg_ctrs3(3)-neg_ctrs3(2))/2/pi<0.314/3) |(abs(neg_ctrs3(3)-neg_ctrs3(2))/2/pi<0.314/2) )
            display('!!!pd') 
+           pd = 1;
         end
     end
     
 end
 
+if (pd==0)
+    set(handles.text1, 'string', '未发现局部放电');
+else
+    set(handles.text1, 'string', '发现局部放电');
+end
 
 
-
-
-
-
+end

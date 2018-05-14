@@ -22,7 +22,7 @@ function varargout = single_pd_mtx(varargin)
 
 % Edit the above text to modify the response to help single_pd_mtx
 
-% Last Modified by GUIDE v2.5 23-Feb-2018 19:59:31
+% Last Modified by GUIDE v2.5 10-May-2018 09:57:06
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -62,6 +62,9 @@ handles.output = hObject;
 % image(ii);
 % colormap gray
 % set(ha,'handlevisibility','off','visible','off');
+
+h_labels = char('局部放电', '电晕干扰', '周期干扰', '随机干扰');
+set(handles.pop_human, 'string', h_labels);
 
 % Update handles structure
 guidata(hObject, handles);
@@ -747,3 +750,41 @@ function pushbutton5_Callback(hObject, eventdata, handles)
 
 dlmwrite('F:\局放GUI\data_lib\pd_lib.csv', handles.SavedSignal, 'delimiter',',','-append');
 
+
+
+% --- Executes on selection change in pop_human.
+function pop_human_Callback(hObject, eventdata, handles)
+% hObject    handle to pop_human (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns pop_human contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from pop_human
+
+% 放电类型选择 back
+h_idx = get(handles.pop_human, 'Value');
+handles.h_idx = h_idx;
+guidata(hObject, handles);
+
+
+% --- Executes during object creation, after setting all properties.
+function pop_human_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to pop_human (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in pushbutton7.
+function pushbutton7_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton7 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+h_idx = handles.h_idx;
+setappdata(0, 'h_idx', h_idx);
+guidata(hObject, handles);

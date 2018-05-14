@@ -22,7 +22,7 @@ function varargout = data_overview(varargin)
 
 % Edit the above text to modify the response to help data_overview
 
-% Last Modified by GUIDE v2.5 08-May-2018 15:29:53
+% Last Modified by GUIDE v2.5 09-May-2018 15:27:31
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -78,7 +78,7 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-[table_cell] = database_status();
+[table_cell] = database_status(1);
 set(handles.tt, 'data', table_cell(:,1:7));  % 前4个是地点，第5个文件，第6，7是系统，人工标注的放电个数，8 is location
 handles.table_cell = table_cell;
 guidata(hObject, handles);
@@ -92,16 +92,18 @@ function tt_CellSelectionCallback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 %display(eventdata.Indices);
-t_row = eventdata.Indices(1);
-t_col = eventdata.Indices(1);
-handles.t_row = t_row;
-handles.t_col = t_col;
+if (length(eventdata.Indices)~=0 & length(eventdata.Indices(1))~=0)
+    t_row = eventdata.Indices(1);
+    t_col = eventdata.Indices(2);
+    handles.t_row = t_row;
+    handles.t_col = t_col;
 
-table_cell = handles.table_cell;
-file_path = table_cell(t_row,8)
-handles.file_path = file_path;
-setappdata(0, 'file_path', file_path);
-guidata(hObject, handles);
+    table_cell = handles.table_cell;
+    file_path = table_cell(t_row,8)
+    handles.file_path = file_path;
+    setappdata(0, 'file_path', file_path);
+    guidata(hObject, handles);
+end
 
 
 % --- Executes on button press in single.
@@ -117,11 +119,47 @@ function pushbutton3_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton3 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-full_name = handles.file_path;
 
-save_name = full_name{1};
+%savefig(save_name);
+%classify_pd_human;
+
+file_path = getappdata(0,'file_path');
+size_file_path = size(file_path);
+save_name = file_path{1};
 save_name(1)='F';
 save_name(length(save_name)-2:length(save_name))='fig';
 
-%savefig(save_name);
-openfig(save_name)
+
+openfig(save_name);
+
+
+
+% --- Executes on button press in pushbutton4.
+function pushbutton4_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton4 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% filter
+% rst1= load('./lib/rst.mat');
+% rst1 = rst1.rst;
+rst1 = handles.table_cell;
+
+t_row = handles.t_row;
+t_col = handles.t_col;
+
+display('row');
+display(t_row);
+display('col');
+display(t_col);
+
+rst2 = [];
+for i=1:size(rst1,1)
+    if (isequal(rst1(i, t_col), rst1(t_row, t_col)))
+       rst2 = [rst2; rst1(i,:)];
+    end
+end
+
+handles.table_cell = rst2;
+set(handles.tt, 'data', rst2(:,1:7)); 
+guidata(hObject, handles);
