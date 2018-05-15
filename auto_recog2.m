@@ -1,7 +1,7 @@
 function [pd] = classify_pd_human(features, handles)
 
 pd =0
-load('features.mat');
+% load('features.mat');
 
 l_rise_time = features(:, 4);
 l_loc = features(:, 1);
@@ -15,6 +15,9 @@ l_tw = [l_t, l_w];
 % TWæ€¿‡
 k = 3;
 color_l = ['r.', 'b.', 'y.', 'm.', 'c.'];
+if ((length(l_tw))<3)
+    return
+end
 [idx, ctrs] = kmeans(l_tw, k);
 axes(handles.axes10);
 for i = 1:k

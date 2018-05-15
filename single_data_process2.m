@@ -1,4 +1,11 @@
-function [SavedSignal, data_cell] = extract_signal2(data, pre_thre)
+function [] = single_data_process2(full_name)
+
+% full_name = rst(19,8);
+% full_name = full_name{1};
+%full_name = 'E:\PDData\t1\t2\t3\t4\2.txt';
+[data] = read_pd_data(full_name);
+
+pre_thre = -1;
 
 %% extract signals
 power_ratio = 1/17.7828;  % -25db channel 2
@@ -29,9 +36,7 @@ NoShakeSignal=NoShakeSignal*power_ratio/1000;
 data=data*power_ratio/1000;
 
 
-
-
-%% calculate signlas params
+% calculate signlas params
  
 %xiaodi的Kmeans中用到的参数：第一行是PD位置，第二行是PD种类，第三行是信号宽度，第四行是上升时间，第五行是幅值，第六行是极性
 SavedSignal=zeros(NoShakeSignalStartMaxStop(1,1),20);
@@ -138,7 +143,6 @@ SavedSignalForKohonenMapingWhole20mSBuffer=zeros(1,5);
    SavedSignal(index,19) = NoShakeSignalStartMaxStop(index, 2);
    SavedSignal(index,20) = NoShakeSignalStartMaxStop(index, 8);
 
-%%
    %xiaodi的Kmeans中用到的参数：第一行是PD位置，第二行是PD种类，第三行是信号宽度，第四行是上升时间，第五行是幅值，第六行是极性
     
    SavedSignalForKmeans(index,1)=SavedSignal(index,1);%%PDLocation
@@ -183,31 +187,109 @@ SavedSignalForKmeans(index,10)=SavedSignal(index,4);%!!!!!RiseTime，暂时把这个参
 
 
 ThresthodValue = ThresthodValue*power_ratio;
+
+
+% %% plot original data
 % 
-% handles.ThresthodValue = ThresthodValue;
-% handles.SavedSignal = SavedSignal;
-% handles.data = data;
-% handles.NoShakeSignalStartMaxStop = NoShakeSignalStartMaxStop;
-% handles.ShakeSignalStartMaxStop = ShakeSignalStartMaxStop;
-
-
-% get pulses
-% plot shake signal data
-for idx = 1:max(1000, size(NoShakeSignalStartMaxStop,1))
-    if NoShakeSignalStartMaxStop(idx, 2)==0
-        break
-    end
-end
-
-start_idxs = NoShakeSignalStartMaxStop(1:idx-1, 2);
-end_idxs = NoShakeSignalStartMaxStop(1:idx-1, 8);
-
-
-data_cell = {};
+% hold off;
+% plot(data);
+% hold on;
+% 
+% % plot non-shake signals data (red)
+% for idx = 1:max(1000, size(NoShakeSignalStartMaxStop,1))
+%     if NoShakeSignalStartMaxStop(idx, 2)==0
+%         break
+%     end
+% end
+% 
+% start_idxs = NoShakeSignalStartMaxStop(1:idx-1, 2);
+% end_idxs = NoShakeSignalStartMaxStop(1:idx-1, 8);
+% 
+% 
 % for i = 1:length(start_idxs)
 %     m = start_idxs(i);
 %     n = end_idxs(i);
-%     data_cell = [data_cell, {data(m-100:n+100)}];
+%     plot(m:n, data(m:n),'r')
 % end
+% 
+% handles.start_idxs = start_idxs;
+% handles.end_idxs = end_idxs;
+% 
+% % plot shake signal data
+% for idx = 1:max(1000, size(ShakeSignalStartMaxStop,1))
+%     if ShakeSignalStartMaxStop(idx, 2)==0
+%         break
+%     end
+% end
+% 
+% start_idxs = ShakeSignalStartMaxStop(1:idx-1, 2);
+% end_idxs = ShakeSignalStartMaxStop(1:idx-1, 4);
+% 
+% 
+% for i = 1:length(start_idxs)
+%     m = start_idxs(i);
+%     n = end_idxs(i);
+%     plot(m:n, data(m:n),'k')
+% end
+% 
+% 
+% % plot 20ms data
+% % x0 = linspace(0,3.1415926*2,2000000);
+% % y0 = sin(x0) * 0.005;
+% % y1 = ones(1,size(x0, 2)) * handles.ThresthodValue / 1000 /17.7828;
+% % plot(y0, 'y');
+% % plot(y1, 'b');
+% 
+% rows_SavedSignal = size(SavedSignal);
+% rows_SavedSignal = rows_SavedSignal(1);
+% if (rows_SavedSignal>0) 
+%     thre_20ms = max(abs(SavedSignal(:, 6))) * 1.1;
+%     plot20ms(thre_20ms);
+%     plot20ms_thre(ThresthodValue);
+%     xlim([0 2000000]);
+% end
+
+%% core statis
+rst = struct();
+rst.data = data;
+rst.SavedSignal = SavedSignal;
+rst.NoShakeSignalStartMaxStop = NoShakeSignalStartMaxStop;
+rst.ShakeSignalStartMaxStop = ShakeSignalStartMaxStop;
+rst.ThresthodValue = ThresthodValue;
+
+
+%save('rst2.mat', '-struct', 'rst');
+%load('rst2.mat');
+
+rst_name = full_name;
+rst_name = [rst_name(1:length(rst_name)-4),'_sta.mat'];
+rst_name(1)='F';
+
+save(rst_name, 'rst');
+
+% 
+% load(rst_name);
+% 
+% % save fig
+% save_name = full_name;
+% save_name(1)='F';
+% save_name(length(save_name)-2:length(save_name))='fig';
+% 
+% [dir_path, name, ext] = fileparts(save_name);
+% if ~exist(dir_path, 'dir')
+%     mkdir(dir_path)
+% end
+% 
+% savefig(save_name);
+% %openfig('test.fig')
+% hold off;
+% close all;
+% 
+% 
+% %% prepare statis
+% save_name(length(save_name)-2:length(save_name))='txt';
+% dlmwrite(save_name, SavedSignal);
+% 
+
 
 end

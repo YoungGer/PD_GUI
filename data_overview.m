@@ -22,7 +22,7 @@ function varargout = data_overview(varargin)
 
 % Edit the above text to modify the response to help data_overview
 
-% Last Modified by GUIDE v2.5 09-May-2018 15:27:31
+% Last Modified by GUIDE v2.5 15-May-2018 09:38:25
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -163,3 +163,19 @@ end
 handles.table_cell = rst2;
 set(handles.tt, 'data', rst2(:,1:7)); 
 guidata(hObject, handles);
+
+
+% --- Executes on button press in pushbutton5.
+function pushbutton5_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton5 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+prpd_auto;
+
+
+% --- Executes on button press in pushbutton6.
+function pushbutton6_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton6 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+single_pd_mtx2;
