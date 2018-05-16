@@ -52,6 +52,7 @@ function single_pd_mtx2_OpeningFcn(hObject, eventdata, handles, varargin)
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to single_pd_mtx2 (see VARARGIN)
 
+
 % Choose default command line output for single_pd_mtx2
 handles.output = hObject;
 
@@ -66,6 +67,7 @@ handles.output = hObject;
 h_labels = char('局部放电', '电晕干扰', '周期干扰', '随机干扰');
 set(handles.pop_human, 'string', h_labels);
 
+pushbutton1_Callback(hObject, eventdata, handles)
 % Update handles structure
 guidata(hObject, handles);
 
@@ -741,27 +743,9 @@ function pushbutton5_Callback(hObject, eventdata, handles)
 
 % recognize
 % 
-% l_rise_time = handles.SavedSignal(:, 4);
-% l_loc = handles.SavedSignal(:, 1);
-% l_flag = handles.SavedSignal(:, 7);
-% l_pv = handles.SavedSignal(:, 6);
-% l_t = handles.SavedSignal(:, 17);
-% l_w = handles.SavedSignal(:, 18);
-% 
-% % normal pic
-% axes(handles.axes7);
-% plot(l_loc, l_flag.*l_pv, '.')
-% hold on;
-% % plot noise 
-% max_pv = max(l_pv);
-% idx = find(l_pv./max_pv < 0.2);
-% plot(l_loc(idx), l_flag(idx).*l_pv(idx), 'r.')
-% plot20ms(max(abs(handles.SavedSignal(:, 6))) * 1.1)
-% xlabel('PD Location')
-% ylabel('Peak Voltage')
-% hold off;
+prpd_auto;
 
-dlmwrite('F:\局放GUI\data_lib\pd_lib.csv', handles.SavedSignal, 'delimiter',',','-append');
+%dlmwrite('F:\局放GUI\data_lib\pd_lib.csv', handles.SavedSignal, 'delimiter',',','-append');
 
 
 

@@ -54,6 +54,9 @@ function prpd_auto_OpeningFcn(hObject, eventdata, handles, varargin)
 
 % Choose default command line output for prpd_auto
 handles.output = hObject;
+pushbutton1_Callback(hObject, eventdata, handles);
+
+
 
 % Update handles structure
 guidata(hObject, handles);
@@ -78,5 +81,26 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
-auto_recog2([0],handles);
+cla(handles.axes1);
+cla(handles.axes2);
+cla(handles.axes3);
+cla(handles.axes4);
+cla(handles.axes5);
+cla(handles.axes6);
+cla(handles.axes7);
+cla(handles.axes8);
+cla(handles.axes9);
+cla(handles.axes10);
+% get feature
+file_path = getappdata(0,'file_path');
+size_file_path = size(file_path);
+if (size_file_path(1)==0)
+    [filename, filepath] = uigetfile('E:\PDData\t1\t2\t3\t4\*');
+    full_name = [filepath filename];
+else
+    full_name = file_path{1};
+end
+% full_name = 'E:\PDData\t1\t2\t3\t4\13.txt';
+[data] = read_pd_data(full_name);
+[features, data_cell] = extract_signal2(data, -1);
+auto_recog2(features, data, handles);
