@@ -115,6 +115,7 @@ function pop_ylabel_Callback(hObject, eventdata, handles)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns pop_ylabel contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from pop_ylabel
+% 得到xy的值并画图
 x_idx = get(handles.pop_xlabel, 'Value');
 y_idx = get(handles.pop_ylabel, 'Value');
 axes(handles.axes1);
@@ -188,7 +189,7 @@ end
 
 handles.pulses = pulses;
 
-% set popupmenu
+% set popupmenu 设定pop值
 b = 1:length(pulses);
 set(handles.popupmenu7, 'string',  num2str(b'));
 

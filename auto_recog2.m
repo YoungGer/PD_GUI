@@ -35,7 +35,7 @@ hold off;
 
 % 对每个类别用PRPD相位图谱
 for i = 1:k
-    % get subset data
+    % get subset data， 得到该聚类的子数据
     l_loc_sub = l_loc(kmeans_idx==i);
     l_theta_sub = l_loc_sub./2000000.*2.*pi;
     l_pv_sub = l_pv(kmeans_idx==i);
@@ -43,7 +43,7 @@ for i = 1:k
     if (length(l_loc_sub)<3)    
         continue;
     end
-    % get pos and neg parts
+    % get pos and neg parts 将正、负数据分开
     pos_theta = l_theta_sub(l_flag_sub==1);
     pos_pv = l_pv_sub(l_flag_sub==1);
     neg_theta = l_theta_sub(l_flag_sub==-1);
@@ -57,6 +57,7 @@ for i = 1:k
     if (length(pos_theta)<1 | length(neg_theta)<1) 
         display('no k==1');
     else    
+        % 计算聚类中心
         pos_ctr_theta = mean(pos_theta);
         pos_ctr_pv = mean(pos_pv);
         neg_ctr_theta = mean(neg_theta);
@@ -84,6 +85,8 @@ for i = 1:k
         else
             axes(handles.axes3);
         end
+        
+        % 极坐标画图可视化
         polar(pos_theta, pos_pv, 'b.')
         hold on;
         polar(pos_ctr_theta, pos_ctr_pv, 'bo' )
@@ -100,6 +103,7 @@ for i = 1:k
     if (length(pos_theta)<2 | length(neg_theta)<2) 
         display('no k==2');
     else
+        % 计算聚类中心
         [pos_idx2, pos_ctrs2] = kmeans([pos_theta, pos_pv], 2);
         [neg_idx2, neg_ctrs2] = kmeans([neg_theta, neg_pv], 2);
 
@@ -110,6 +114,8 @@ for i = 1:k
         else
             axes(handles.axes6);
         end
+        
+        % 极坐标可视化
         polar(pos_theta(pos_idx2==1), pos_pv(pos_idx2==1), 'b.')
         hold on;
         polar(pos_ctrs2(1,1), pos_ctrs2(1,2), 'bo' )
@@ -161,6 +167,7 @@ for i = 1:k
         display('no k==3');
     else
         % k==3
+        % 计算聚类中心
         [pos_idx3, pos_ctrs3] = kmeans([pos_theta, pos_pv], 3);
         [neg_idx3, neg_ctrs3] = kmeans([neg_theta, neg_pv], 3);
 
@@ -171,6 +178,8 @@ for i = 1:k
         else
             axes(handles.axes9);
         end
+        
+        % 极坐标可视化
         polar(pos_theta(pos_idx3==1), pos_pv(pos_idx3==1), 'b.')
         hold on;
         polar(pos_ctrs3(1,1), pos_ctrs3(1,2), 'bo' )
@@ -233,7 +242,7 @@ for i = 1:k
     
 end
 
-%% axes11 plot
+%% axes11 plot 这里是老师提取信号的代码
 
 pre_thre = -1;
 % extract signals
@@ -365,14 +374,14 @@ SavedSignalForKmeans(index,10)=SavedSignal(index,4);%!!!!!RiseTime，暂时把这个参
 ThresthodValue = ThresthodValue*power_ratio;
 
 
-% plot original data
+% plot original data， 画原始数据
 
 hold off;
 axes(handles.axes11);
 plot(data);
 hold on;
 
-% plot non-shake signals data (red)
+% plot non-shake signals data (red) 画分震荡信号
 for idx = 1:max(1000, size(NoShakeSignalStartMaxStop,1))
     if NoShakeSignalStartMaxStop(idx, 2)==0
         break
@@ -385,7 +394,7 @@ for i = 1:length(start_idxs)
     n = end_idxs(i);
     plot(m:n, data(m:n),'r')
 end
-% plot shake signal data
+% plot shake signal data 画震荡信号
 for idx = 1:max(1000, size(ShakeSignalStartMaxStop,1))
     if ShakeSignalStartMaxStop(idx, 2)==0
         break
@@ -407,6 +416,7 @@ end
 % plot(y0, 'y');
 % plot(y1, 'b');
 
+%20ms的数据可视化
 rows_SavedSignal = size(SavedSignal);
 rows_SavedSignal = rows_SavedSignal(1);
 if (rows_SavedSignal>0) 

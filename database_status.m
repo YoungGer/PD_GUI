@@ -23,18 +23,18 @@ size_file_path = size(file_path);
 
 %% refresh update some label 更新标签数据
 if (refresh) 
-    % get orig rst
+    % get orig rst 载入原始数据
     rst = load('./lib/rst.mat');
     rst = rst.rst;
-    % iterate to find correspnd rst
+    % iterate to find correspnd rst  找到对应需要更新的位置
     for j=1:length(rst)
         if (size_h_idx(1)~=0 & size_file_path(1)~=0 & isequal(file_path, cell(rst(j,8))))
             rst{j,7} = h_idx;
         end
     end
-    % update rst 
+    % update rst  保存
     save('./lib/rst.mat', 'rst');
-    % for chinese show
+    % for chinese show 中文显现
     for j=1:length(rst)
         if (rst{j,7}==1)
             rst{j,7} = '局部放电';
@@ -107,7 +107,7 @@ end
 % rst = load('./lib/rst.mat');
 % rst = rst.rst;    
 
-%dlmwrite('./lib/rst.txt', cell2table(rst));
+%dlmwrite('./lib/rst.txt', cell2table(rst)); 储存库信息
 save('./lib/rst.mat', 'rst');
 %load('./lib/rst.mat');
 

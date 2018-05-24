@@ -810,7 +810,7 @@ function pushbutton5_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % recognize
-% 
+% 相位图谱识别模块
 prpd_auto_s;
 prpd_auto2_s;
 prpd_auto3_s;
@@ -862,6 +862,7 @@ function pushbutton8_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton8 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+% 查看数据模块
 chakan_data2;
 
 

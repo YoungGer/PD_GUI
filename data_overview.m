@@ -98,14 +98,19 @@ function tt_CellSelectionCallback(hObject, eventdata, handles)
 
 %display(eventdata.Indices);
 if (length(eventdata.Indices)~=0 & length(eventdata.Indices(1))~=0)
+    
+    % 获得行列的位置信息
     t_row = eventdata.Indices(1);
     t_col = eventdata.Indices(2);
     handles.t_row = t_row;
     handles.t_col = t_col;
-
+    
+    % 从表格中获得路径信息
     table_cell = handles.table_cell;
     file_path = table_cell(t_row,8)
     handles.file_path = file_path;
+    
+    % 储存到全局变量
     setappdata(0, 'file_path', file_path);
     guidata(hObject, handles);
 end
