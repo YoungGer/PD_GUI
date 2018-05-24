@@ -60,11 +60,8 @@ handles.output = hObject;
 % UIWAIT makes similar wait for user response (see UIRESUME)
 % uiwait(handles.gui1);
 
-% get data from pd_gui1
-h = findobj('Tag', 'gui0');
-g1data = guidata(h);
 % get data for this handler
-a = g1data.a;
+a = getappdata(0, 'a');
 [select_signal, select_data] = find_similar_signal(a);
 handles.select_signal = select_signal;
 handles.select_data = select_data;

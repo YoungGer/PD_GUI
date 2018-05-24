@@ -59,7 +59,7 @@ handles.output = hObject;
 % add background
 ha=axes('units','normalized','pos',[0 0 1 1]);
 uistack(ha,'down');
-ii=imread('hp1.png');
+ii=imread('hp3.png');
 image(ii);
 colormap gray
 set(ha,'handlevisibility','off','visible','off');

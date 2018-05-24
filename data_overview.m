@@ -22,7 +22,7 @@ function varargout = data_overview(varargin)
 
 % Edit the above text to modify the response to help data_overview
 
-% Last Modified by GUIDE v2.5 15-May-2018 09:38:25
+% Last Modified by GUIDE v2.5 23-May-2018 09:29:24
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -170,7 +170,7 @@ function pushbutton5_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton5 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-prpd_auto;
+single_pd_mtx3;
 
 
 % --- Executes on button press in pushbutton6.
@@ -179,3 +179,81 @@ function pushbutton6_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 single_pd_mtx2;
+
+
+% --- Executes on button press in pushbutton7.
+function pushbutton7_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton7 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+main_path = 'E:\PDData';
+%% get initial data
+dir0 = dir(main_path);
+% iterate Hunterson
+rst = [];
+for i0 = 3:size(dir0,1)
+    name1 = dir0(i0).name;
+    sub_path1 = fullfile(main_path, dir0(i0).name);  %Hunterson
+    dir1 = dir(sub_path1);
+    % iterate Hunterson/Board1
+    for i1 = 3:size(dir1, 1)
+        name2 = dir1(i1).name;
+        sub_path2 = fullfile(sub_path1, dir1(i1).name);  %Hunterson
+        dir2 = dir(sub_path2);
+        %  iterate Hunterson/Board1/Tran
+        for i2 = 3:size(dir2, 1)
+            name3 = dir2(i2).name;
+            sub_path3 = fullfile(sub_path2, dir2(i2).name);  %Hunterson
+            dir3 = dir(sub_path3);
+            % iterate date
+            for i3 = 3:size(dir3, 1)
+                name4 = dir3(i3).name;
+                sub_path4 = fullfile(sub_path3, dir3(i3).name);  %Hunterson
+                dir4 = dir(sub_path4);
+                % iterate file
+                for i4 = 3:size(dir4, 1)
+                    name5 = dir4(i4).name;
+                    sub_path5 = fullfile(sub_path4, dir4(i4).name);  %txt/trc file
+                    % get name cell
+                    single_name = cell(1,8);
+                    single_name{1,1} =  name1;
+                    single_name{1,2} = name2;
+                    single_name{1,3} = name3;
+                    single_name{1,4} = name4; % date
+                    single_name{1,5} = name5; % file
+                    single_name{1,6} = -1;
+                    single_name{1,7} = -1;
+%                     if (size_h_idx(1)~=0 & size_file_path(1)~=0 & isequal(file_path{1}, sub_path5))
+%                         single_name{1,7} = h_idx;
+%                     else
+%                         single_name{1,7} = -1;
+%                     end
+                    single_name{1,8} = sub_path5; % file path
+                    rst = [rst;single_name];
+            end
+          
+        end
+    end
+    end
+end
+
+%%
+
+%dlmwrite('./lib/rst.txt', cell2table(rst));
+save('./lib/rst.mat', 'rst');
+
+
+% --- Executes on button press in pushbutton8.
+function pushbutton8_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton8 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+rst = load('./lib/rst.mat');
+rst = rst.rst;
+N = length(rst);
+for i=1:N
+    display(i);  %167 error
+    full_name = rst(i,8);
+    full_name = full_name{1};
+    single_data_process2(full_name);
+end

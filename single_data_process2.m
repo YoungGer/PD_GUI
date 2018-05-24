@@ -265,6 +265,10 @@ rst_name = full_name;
 rst_name = [rst_name(1:length(rst_name)-4),'_sta.mat'];
 rst_name(1)='F';
 
+[filepath, name, ext] = fileparts(rst_name);
+if (exist(filepath, 'dir')~=7)
+    mkdir(filepath)
+end
 save(rst_name, 'rst');
 
 % 

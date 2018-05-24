@@ -22,7 +22,7 @@ function varargout = single_pd_mtx2(varargin)
 
 % Edit the above text to modify the response to help single_pd_mtx2
 
-% Last Modified by GUIDE v2.5 15-May-2018 08:57:20
+% Last Modified by GUIDE v2.5 22-May-2018 21:13:55
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -104,6 +104,7 @@ else
     full_name = file_path{1};
 end
     
+N=1;
 
 %full_name = 'F:\局放GUI\PDData2\data\C1_12EG018A002__2012_06_14_12_07_38.txt';
 %full_name = 'F:\局放GUI\data\small2\C2Trace00016.trc';
@@ -126,7 +127,7 @@ handles.SavedSignal = SavedSignal;
 handles.data = data;
 handles.NoShakeSignalStartMaxStop = NoShakeSignalStartMaxStop;
 handles.ShakeSignalStartMaxStop = ShakeSignalStartMaxStop;
-
+handles.N = N;
 
 set(handles.currthre, 'string', num2str(handles.ThresthodValue));
 
@@ -744,6 +745,8 @@ function pushbutton5_Callback(hObject, eventdata, handles)
 % recognize
 % 
 prpd_auto;
+prpd_auto2;
+prpd_auto3;
 
 %dlmwrite('F:\局放GUI\data_lib\pd_lib.csv', handles.SavedSignal, 'delimiter',',','-append');
 
@@ -785,3 +788,29 @@ function pushbutton7_Callback(hObject, eventdata, handles)
 h_idx = handles.h_idx;
 setappdata(0, 'h_idx', h_idx);
 guidata(hObject, handles);
+
+
+% --- Executes on button press in pushbutton8.
+function pushbutton8_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton8 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+chakan_data;
+
+
+% --- Executes on button press in pushbutton9.
+function pushbutton9_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton9 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in pushbutton10.
+function pushbutton10_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton10 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+idx = get(handles.popupmenu1, 'Value');
+a = handles.a;
+setappdata(0, 'a', a);
+similar;

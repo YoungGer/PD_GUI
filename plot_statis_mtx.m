@@ -2,12 +2,21 @@ function [] = plot_statis_mtx(handles)
 x_idx = get(handles.pop_xlabel, 'Value');
 y_idx = get(handles.pop_ylabel, 'Value');
 
-l_flag = handles.SavedSignal(:, 7);
-l_rise_time = handles.SavedSignal(:, 4) .* l_flag;
-l_loc = handles.SavedSignal(:, 1);
-l_pv = handles.SavedSignal(:, 6) .* l_flag;
-l_t = handles.SavedSignal(:, 17) .* l_flag;
-l_w = handles.SavedSignal(:, 18) .* l_flag;
+try
+    l_flag = handles.SavedSignal_SS(:, 7);
+    l_rise_time = handles.SavedSignal_SS(:, 4) .* l_flag;
+    l_loc = handles.SavedSignal_SS(:, 1);
+    l_pv = handles.SavedSignal_SS(:, 6) .* l_flag;
+    l_t = handles.SavedSignal_SS(:, 17) .* l_flag;
+    l_w = handles.SavedSignal_SS(:, 18) .* l_flag;
+catch 
+    l_flag = handles.SavedSignal(:, 7);
+    l_rise_time = handles.SavedSignal(:, 4) .* l_flag;
+    l_loc = handles.SavedSignal(:, 1);
+    l_pv = handles.SavedSignal(:, 6) .* l_flag;
+    l_t = handles.SavedSignal(:, 17) .* l_flag;
+    l_w = handles.SavedSignal(:, 18) .* l_flag;
+end
 
 c = containers.Map;
 c('1') = l_rise_time;
@@ -33,7 +42,7 @@ hold off;
 axes(handles.axes7);
 plot(l_loc, l_pv, '.')
 hold on;
-plot20ms(max(abs(handles.SavedSignal(:, 6))) * 1.1)
+plot20ms(max(abs(l_pv)) * 1.1)
 hold on;
 xlabel('PD Location')
 ylabel('Peak Voltage')
