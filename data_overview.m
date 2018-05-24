@@ -78,7 +78,12 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+% 查看文件状态
+
 [table_cell] = database_status(1);
+
+% 修改表格
 set(handles.tt, 'data', table_cell(:,1:7));  % 前4个是地点，第5个文件，第6，7是系统，人工标注的放电个数，8 is location
 handles.table_cell = table_cell;
 guidata(hObject, handles);
@@ -111,6 +116,7 @@ function single_Callback(hObject, eventdata, handles)
 % hObject    handle to single (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+% 单信号分析模块
 single_pd_mtx;
 
 
@@ -123,13 +129,13 @@ function pushbutton3_Callback(hObject, eventdata, handles)
 %savefig(save_name);
 %classify_pd_human;
 
+% 信号可视化部分
 file_path = getappdata(0,'file_path');
 size_file_path = size(file_path);
 save_name = file_path{1};
+% 修改文件名得到对应的fig文件名
 save_name(1)='F';
 save_name(length(save_name)-2:length(save_name))='fig';
-
-
 openfig(save_name);
 
 
@@ -143,16 +149,21 @@ function pushbutton4_Callback(hObject, eventdata, handles)
 % filter
 % rst1= load('./lib/rst.mat');
 % rst1 = rst1.rst;
-rst1 = handles.table_cell;
 
+%% 文件过滤筛选
+
+% 得到原始表数据
+rst1 = handles.table_cell;
 t_row = handles.t_row;
 t_col = handles.t_col;
 
+% 得到对应行列标签
 display('row');
 display(t_row);
 display('col');
 display(t_col);
 
+% 根据对应行列标签得到新的数据
 rst2 = [];
 for i=1:size(rst1,1)
     if (isequal(rst1(i, t_col), rst1(t_row, t_col)))
@@ -160,6 +171,7 @@ for i=1:size(rst1,1)
     end
 end
 
+% 保存映射
 handles.table_cell = rst2;
 set(handles.tt, 'data', rst2(:,1:7)); 
 guidata(hObject, handles);
@@ -170,6 +182,7 @@ function pushbutton5_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton5 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+% 聚合分析模块
 single_pd_mtx3;
 
 
@@ -178,6 +191,7 @@ function pushbutton6_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton6 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+% 自动库模块
 single_pd_mtx2;
 
 
@@ -186,8 +200,9 @@ function pushbutton7_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton7 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
 main_path = 'E:\PDData';
-%% get initial data
+%% get initial data， 遍历得到所有放电文件的位置信息
 dir0 = dir(main_path);
 % iterate Hunterson
 rst = [];
@@ -240,6 +255,7 @@ end
 %%
 
 %dlmwrite('./lib/rst.txt', cell2table(rst));
+% 重新写入
 save('./lib/rst.mat', 'rst');
 
 
@@ -248,9 +264,12 @@ function pushbutton8_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton8 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+% 载入数据库
 rst = load('./lib/rst.mat');
 rst = rst.rst;
 N = length(rst);
+% 对数据库进行遍历更新
 for i=1:N
     display(i);  %167 error
     full_name = rst(i,8);

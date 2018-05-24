@@ -11,17 +11,17 @@ function rst = database_status(refresh)
 % dir2 = dir(sub_path2);
 % sub_path3 = fullfile(sub_path2, dir2(3).name);  % Hunterston\11kVStationBD3\Tran
 
-% start
+% start  地址信息
 main_path = 'D:\PDData';
 main_path = 'E:\PDData';
 
-% prepare
+% prepare 准备路径
 h_idx = getappdata(0,'h_idx');
 size_h_idx = size(h_idx);
 file_path = getappdata(0,'file_path');
 size_file_path = size(file_path);
 
-%% refresh update some label
+%% refresh update some label 更新标签数据
 if (refresh) 
     % get orig rst
     rst = load('./lib/rst.mat');
@@ -52,7 +52,8 @@ if (refresh)
 end
 
 
-%% get initial data
+%% get initial data， 遍历文件夹的数据
+
 dir0 = dir(main_path);
 % iterate Hunterson
 rst = [];

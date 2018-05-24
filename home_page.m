@@ -59,7 +59,7 @@ handles.output = hObject;
 % add background
 ha=axes('units','normalized','pos',[0 0 1 1]);
 uistack(ha,'down');
-ii=imread('hp3.png');
+ii=imread('hp3.png');   % 在这里更改背景图片
 image(ii);
 colormap gray
 set(ha,'handlevisibility','off','visible','off');
@@ -113,6 +113,8 @@ function pushbutton2_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+% 单信号分析模块
 single_pd_mtx;
 
 % --- Executes on button press in pushbutton3.
@@ -120,6 +122,8 @@ function pushbutton3_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton3 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+% 同源多信号分析模块
 files_analysis;
 
 % --- Executes on button press in pushbutton4.
@@ -134,6 +138,7 @@ function pushbutton5_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton5 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+% 局放样本库模块
 pd_lib;
 
 
@@ -142,4 +147,6 @@ function pushbutton6_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton6 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+% 数据概览模块
 data_overview

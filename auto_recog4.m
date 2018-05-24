@@ -57,7 +57,7 @@ for i = 1:k
         neg_ctr_theta = mean(neg_theta);
         neg_ctr_pv = mean(neg_pv);
         diff_angle = abs(pos_ctr_theta-neg_ctr_theta);
-        if (diff_angle>180*0.9 & diff_angle<180*1.1)  %判据
+        if (diff_angle>pi*0.9 & diff_angle<pi*1.1)  %放电判据
            display('!!!pd') ;
            pd = 1;
         end
@@ -115,6 +115,7 @@ for i = 1:k
         pos_ctrs2 = sort(pos_ctrs2);
         neg_ctrs2 = sort(neg_ctrs2);
         
+
         %计算相对中心点角度
         diff_angle1 = abs(pos_ctrs2(1)-neg_ctrs2(1));
         diff_angle2 = abs(pos_ctrs2(2)-neg_ctrs2(2));
@@ -123,10 +124,10 @@ for i = 1:k
         neg_angle2 = abs(neg_ctrs2(1)-neg_ctrs2(2));
 
         %判据
-        if (diff_angle1>180*0.9 & diff_angle1<180*1.1) & ...
-           (diff_angle2>180*0.9 & diff_angle2<180*1.1) & ...
-           ((neg_angle1>60*0.9 & neg_angle1<60*1.1) | (neg_angle1>120*0.9 & neg_angle1<120*1.1))   & ...
-           ((neg_angle2>60*0.9 & neg_angle2<60*1.1) | (neg_angle2>120*0.9 & neg_angle2<120*1.1))
+        if (diff_angle1>pi*0.9 & diff_angle1<pi*1.1) & ...
+           (diff_angle2>pi*0.9 & diff_angle2<pi*1.1) & ...
+           ((neg_angle1>pi/3*0.9 & neg_angle1<pi/3*1.1) | (neg_angle1>pi*2/3*0.9 & neg_angle1<pi*2/3*1.1))   & ...
+           ((neg_angle2>pi/3*0.9 & neg_angle2<pi/3*1.1) | (neg_angle2>pi*2/3*0.9 & neg_angle2<pi*2/3*1.1))
            display('!!!pd') 
            pd = 2;
         end
@@ -172,11 +173,26 @@ for i = 1:k
 
         pos_ctrs3 = sort(pos_ctrs3);
         neg_ctrs3 = sort(neg_ctrs3);
-        if (abs(pos_ctrs3(1)-neg_ctrs3(1))/2/pi<0.314) & (abs(pos_ctrs3(2)-neg_ctrs3(2))/2/pi<0.314) &  (abs(pos_ctrs3(3)-neg_ctrs3(3))/2/pi<0.314) & ...
-            ((abs(pos_ctrs3(1)-pos_ctrs3(2))/2/pi<0.314/3) |(abs(pos_ctrs3(1)-pos_ctrs3(2))/2/pi<0.314/2) ) & ...
-            ((abs(pos_ctrs3(3)-pos_ctrs3(2))/2/pi<0.314/3) |(abs(pos_ctrs3(3)-pos_ctrs3(2))/2/pi<0.314/2) ) & ...
-            ((abs(neg_ctrs3(1)-neg_ctrs3(2))/2/pi<0.314/3) |(abs(neg_ctrs3(1)-neg_ctrs3(2))/2/pi<0.314/2) ) & ...
-            ((abs(neg_ctrs3(3)-neg_ctrs3(2))/2/pi<0.314/3) |(abs(neg_ctrs3(3)-neg_ctrs3(2))/2/pi<0.314/2) )
+
+
+        %计算相对中心点角度
+        diff_angle1 = abs(pos_ctrs3(1)-neg_ctrs3(1));
+        diff_angle2 = abs(pos_ctrs3(2)-neg_ctrs3(2));
+        diff_angle3 = abs(pos_ctrs3(3)-neg_ctrs3(3));
+        %计算相邻中心点角度
+        neg_angle1 = abs(pos_ctrs3(1)-pos_ctrs3(2));
+        neg_angle2 = abs(pos_ctrs3(2)-pos_ctrs3(3));
+        neg_angle3 = abs(neg_ctrs3(1)-neg_ctrs3(2));
+        neg_angle4 = abs(neg_ctrs3(2)-neg_ctrs3(3));
+
+        %判据
+        if (diff_angle1>pi*0.9 & diff_angle1<pi*1.1) & ...
+           (diff_angle2>pi*0.9 & diff_angle2<pi*1.1) & ...
+           (diff_angle3>pi*0.9 & diff_angle3<pi*1.1) & ...
+           ((neg_angle1>pi/3*0.9 & neg_angle1<60*1.1) | (neg_angle1>pi*2/3*0.9 & neg_angle1<pi*2/3*1.1))   & ...
+           ((neg_angle2>pi/3*0.9 & neg_angle2<60*1.1) | (neg_angle2>pi*2/3*0.9 & neg_angle2<pi*2/3*1.1))   & ...
+           ((neg_angle3>pi/3*0.9 & neg_angle3<60*1.1) | (neg_angle3>pi*2/3*0.9 & neg_angle3<pi*2/3*1.1))   & ...
+           ((neg_angle4>pi/3*0.9 & neg_angle4<60*1.1) | (neg_angle4>pi*2/3*0.9 & neg_angle4<pi*2/3*1.1))   
            display('!!!pd') 
            pd = 3;
         end

@@ -55,6 +55,7 @@ function files_analysis_OpeningFcn(hObject, eventdata, handles, varargin)
 % Choose default command line output for files_analysis
 handles.output = hObject;
 
+% 设定pop的值
 labels = char('rise_time', 'peak_voltage',  't', 'w', 'loc');
 set(handles.pop_xlabel, 'string', labels);
 set(handles.pop_ylabel, 'string', labels);
@@ -87,6 +88,7 @@ function pop_xlabel_Callback(hObject, eventdata, handles)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns pop_xlabel contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from pop_xlabel
+% 得到x,y的pop值
 x_idx = get(handles.pop_xlabel, 'Value');
 y_idx = get(handles.pop_ylabel, 'Value');
 axes(handles.axes1);
@@ -139,7 +141,7 @@ function pop_bar_Callback(hObject, eventdata, handles)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns pop_bar contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from pop_bar
-% hist plot
+% hist plot hist图
 axes(handles.axes3);
 idx = get(handles.pop_bar, 'Value');
 hist(handles.c(num2str(idx)));
@@ -163,13 +165,14 @@ function pushbutton2_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% choose data callback, get features
+% choose data callback, get features，得到数据文件夹
 [filename, filepath] = uigetfile('*');
 %filepath = 'F:\局放GUI\data\small2\';
 files = dir(filepath);
 features = [];
 pulses = {};
 %full_names = [];
+% 遍历数据，得到特征存储变量features
 for i = 3:size(files,1)
     % get full_name 
     file_name = files(i).name;
@@ -208,7 +211,7 @@ c('3') = l_t;
 c('4') = l_w;
 c('5') = l_loc;
 handles.c = c;
-%% normal pic
+%% normal pic  时域可视化
 axes(handles.axes2);
 plot(l_loc, l_flag.*l_pv, '.')
 plot20ms(max(abs(l_pv))*1.3);
@@ -216,7 +219,7 @@ xlabel('PD Location')
 ylabel('Peak Voltage')
 
 %% 
-% statis matrix plot
+% statis matrix plot 统计参数可视化
 x_idx = get(handles.pop_xlabel, 'Value');
 y_idx = get(handles.pop_ylabel, 'Value');
 axes(handles.axes1);
@@ -230,7 +233,7 @@ set(handles.text3, 'string', num2str(size(l_rise_time,1)));
 
 guidata(hObject, handles);
 
-%% polar plot
+%% polar plot 极坐标可视化
 [pos_loc, pos_val, neg_loc, neg_val] = polarsize2(l_loc, l_pv, l_flag);
 axes(handles.axes5);
 polar(pos_loc, pos_val, 'bo');
@@ -253,6 +256,8 @@ function popupmenu7_Callback(hObject, eventdata, handles)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns popupmenu7 contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from popupmenu7
+
+% 画脉冲的数据
 idx = get(handles.popupmenu7, 'Value');
 data = cell2mat(handles.pulses(idx));
 N = length(data);

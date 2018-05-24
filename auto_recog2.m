@@ -3,6 +3,7 @@ function [pd] = classify_pd_human(features, data, handles)
 pd =0
 % load('features.mat');
 
+% 抽取特征
 l_rise_time = features(:, 4);
 l_loc = features(:, 1);
 l_flag = features(:, 7);
@@ -20,10 +21,14 @@ if ((length(l_tw))<3)
 end
 [kmeans_idx, ctrs] = kmeans(l_tw, k);
 axes(handles.axes10);
+
+% 根据聚类结果画图
 for i = 1:k
     hold on;
     plot(l_tw(kmeans_idx==i, 1), l_tw(kmeans_idx==i, 2), color_l(i*2-1:i*2));
 end
+
+% 聚类中心画图
 plot(ctrs(:,1), ctrs(:,2), 'kx', 'MarkerSize', 12, 'LineWidth', 2);
 plot(ctrs(:,1), ctrs(:,2), 'ko', 'MarkerSize', 12, 'LineWidth', 2);
 hold off;
@@ -47,7 +52,7 @@ for i = 1:k
     length(neg_theta);
     
     
-    %% k==1
+    %% k==1 单相放电
 
     if (length(pos_theta)<1 | length(neg_theta)<1) 
         display('no k==1');
@@ -57,7 +62,9 @@ for i = 1:k
         neg_ctr_theta = mean(neg_theta);
         neg_ctr_pv = mean(neg_pv);
         diff_angle = abs(pos_ctr_theta-neg_ctr_theta);
-        if (diff_angle>180*0.9 & diff_angle<180*1.1)  %判据
+        display('!!!k=1');
+        display(diff_angle) ;
+        if (diff_angle>pi*0.9 & diff_angle<pi*1.1)  %放电判据
            display('!!!pd') ;
            pd = 1;
            if (i==1)
@@ -87,7 +94,7 @@ for i = 1:k
         hold off;
     end
     
-    %% k==2
+    %% k==2 双相放电
 
     % k==2
     if (length(pos_theta)<2 | length(neg_theta)<2) 
@@ -130,10 +137,10 @@ for i = 1:k
         neg_angle2 = abs(neg_ctrs2(1)-neg_ctrs2(2));
 
         %判据
-        if (diff_angle1>180*0.9 & diff_angle1<180*1.1) & ...
-           (diff_angle2>180*0.9 & diff_angle2<180*1.1) & ...
-           ((neg_angle1>60*0.9 & neg_angle1<60*1.1) | (neg_angle1>120*0.9 & neg_angle1<120*1.1))   & ...
-           ((neg_angle2>60*0.9 & neg_angle2<60*1.1) | (neg_angle2>120*0.9 & neg_angle2<120*1.1))
+        if (diff_angle1>pi*0.9 & diff_angle1<pi*1.1) & ...
+           (diff_angle2>pi*0.9 & diff_angle2<pi*1.1) & ...
+           ((neg_angle1>pi/3*0.9 & neg_angle1<pi/3*1.1) | (neg_angle1>pi*2/3*0.9 & neg_angle1<pi*2/3*1.1))   & ...
+           ((neg_angle2>pi/3*0.9 & neg_angle2<pi/3*1.1) | (neg_angle2>pi*2/3*0.9 & neg_angle2<pi*2/3*1.1))
            display('!!!pd') 
            pd = 2;
            if (i==1)
@@ -148,7 +155,7 @@ for i = 1:k
        
     end
 
-    %% k==3
+    %% k==3 三相放电
    
     if (length(pos_theta)<3 | length(neg_theta)<3) 
         display('no k==3');
@@ -202,13 +209,13 @@ for i = 1:k
         neg_angle4 = abs(neg_ctrs3(2)-neg_ctrs3(3));
 
         %判据
-        if (diff_angle1>180*0.9 & diff_angle1<180*1.1) & ...
-           (diff_angle2>180*0.9 & diff_angle2<180*1.1) & ...
-           (diff_angle3>180*0.9 & diff_angle3<180*1.1) & ...
-           ((neg_angle1>60*0.9 & neg_angle1<60*1.1) | (neg_angle1>120*0.9 & neg_angle1<120*1.1))   & ...
-           ((neg_angle2>60*0.9 & neg_angle2<60*1.1) | (neg_angle2>120*0.9 & neg_angle2<120*1.1))   & ...
-           ((neg_angle3>60*0.9 & neg_angle3<60*1.1) | (neg_angle3>120*0.9 & neg_angle3<120*1.1))   & ...
-           ((neg_angle4>60*0.9 & neg_angle4<60*1.1) | (neg_angle4>120*0.9 & neg_angle4<120*1.1))   
+        if (diff_angle1>pi*0.9 & diff_angle1<pi*1.1) & ...
+           (diff_angle2>pi*0.9 & diff_angle2<pi*1.1) & ...
+           (diff_angle3>pi*0.9 & diff_angle3<pi*1.1) & ...
+           ((neg_angle1>pi/3*0.9 & neg_angle1<60*1.1) | (neg_angle1>pi*2/3*0.9 & neg_angle1<pi*2/3*1.1))   & ...
+           ((neg_angle2>pi/3*0.9 & neg_angle2<60*1.1) | (neg_angle2>pi*2/3*0.9 & neg_angle2<pi*2/3*1.1))   & ...
+           ((neg_angle3>pi/3*0.9 & neg_angle3<60*1.1) | (neg_angle3>pi*2/3*0.9 & neg_angle3<pi*2/3*1.1))   & ...
+           ((neg_angle4>pi/3*0.9 & neg_angle4<60*1.1) | (neg_angle4>pi*2/3*0.9 & neg_angle4<pi*2/3*1.1))   
            display('!!!pd') 
            pd = 2;
            if (i==1)

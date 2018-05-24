@@ -58,6 +58,7 @@ handles.output = hObject;
 %  load('F:\PDData\t1\t2\t3\t4\3_sta.mat');
 % SavedSignal = rst.SavedSignal;
 
+% 获得全局文件的地址
 file_path = getappdata(0,'file_path');
 size_file_path = size(file_path);
 if (size_file_path(1)==0)
@@ -67,15 +68,15 @@ else
     full_name = file_path{1};
 end
 
+% 获得库地址
 rst_name = full_name;
 rst_name = [rst_name(1:length(rst_name)-4),'_sta.mat'];
 rst_name(1)='F';
 load(rst_name);
 
+% 可视化参数信息
 data = rst.data;
 SavedSignal = rst.SavedSignal;
-
-
 set(handles.tt, 'data', SavedSignal(:,1:18));  % 前4个是地点，第5个文件，第6，7是系统，人工标注的放电个数，8 is location
 
 handles.curr_data = SavedSignal(:,1:18);

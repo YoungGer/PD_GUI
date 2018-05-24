@@ -53,6 +53,8 @@ function pd_lib_OpeningFcn(hObject, eventdata, handles, varargin)
 % varargin   command line arguments to pd_lib (see VARARGIN)
 
 % Choose default command line output for pd_lib
+
+% 获得pd库的文件
 handles.output = hObject;
 handles.M = csvread('F:\局放GUI\data_lib\pd_lib.csv');
 % Update handles structure
@@ -84,7 +86,7 @@ function popupmenu1_Callback(hObject, eventdata, handles)
 
 idx = get(handles.popupmenu1, 'Value');
 
-%% get params and data
+%% get params and data，得到参数和数据
 params = handles.M(idx, 1:20);
 for i=21:size(handles.M, 2)
     if  handles.M(idx, i)==0
@@ -93,14 +95,14 @@ for i=21:size(handles.M, 2)
 end
 data =  handles.M(idx, 21:i-1);
 
-%% plot orig data
+%% plot orig data 画原始的时域图
 axes(handles.axes2);
 plot(1:size(data,2), data,'b')
 hold on;
 plot(101:size(data,2)-100, data(1, 101:size(data,2)-100),'r');
 hold off;
 
-%% others
+%% others  更新handles
 labels = char('rise_time', 'peak_voltage',  't', 'w', 'loc');
 set(handles.pop_xlabel, 'string', labels);
 set(handles.pop_ylabel, 'string', labels);
@@ -129,6 +131,7 @@ function pop_xlabel_Callback(hObject, eventdata, handles)
 % Hints: contents = cellstr(get(hObject,'String')) returns pop_xlabel contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from pop_xlabel
 % two axes data
+% 得到x，y的pop值
 x_idx = get(handles.pop_xlabel, 'Value');
 y_idx = get(handles.pop_ylabel, 'Value');
 axes(handles.axes3);
@@ -155,6 +158,7 @@ function pop_ylabel_Callback(hObject, eventdata, handles)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns pop_ylabel contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from pop_ylabel
+% 得到x，y的pop值
 x_idx = get(handles.pop_xlabel, 'Value');
 y_idx = get(handles.pop_ylabel, 'Value');
 axes(handles.axes3);
@@ -208,6 +212,7 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 
 %% get data
 % refresh callback
+% 读取局放lib数据
 M = csvread('F:\局放GUI\data_lib\pd_lib.csv');
 N = size(M, 1);
 
@@ -250,12 +255,12 @@ function pushbutton2_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% delete 
+% delete 删除不需要的数据
 M = handles.M;
 N = size(M, 1);
 
 row_idx = get(handles.popupmenu1, 'Value');
 
 M(row_idx,:) = [];
-
+% 更新数据库
 dlmwrite('F:\局放GUI\data_lib\pd_lib.csv', M, 'delimiter',',');

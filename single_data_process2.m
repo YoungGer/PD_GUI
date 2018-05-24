@@ -261,6 +261,7 @@ rst.ThresthodValue = ThresthodValue;
 %save('rst2.mat', '-struct', 'rst');
 %load('rst2.mat');
 
+% 保存库信息到F盘
 rst_name = full_name;
 rst_name = [rst_name(1:length(rst_name)-4),'_sta.mat'];
 rst_name(1)='F';

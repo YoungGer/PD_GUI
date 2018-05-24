@@ -62,7 +62,9 @@ handles.output = hObject;
 
 % get data for this handler
 a = getappdata(0, 'a');
+% 找到相似信号
 [select_signal, select_data] = find_similar_signal(a);
+% 更新handles
 handles.select_signal = select_signal;
 handles.select_data = select_data;
 handles.N = size(select_signal, 1);

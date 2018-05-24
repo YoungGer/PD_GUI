@@ -81,6 +81,8 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+% 清除图片
 cla(handles.axes1);
 %cla(handles.axes2);
 %cla(handles.axes3);
@@ -92,6 +94,7 @@ cla(handles.axes7);
 %cla(handles.axes9);
 cla(handles.axes10);
 % get feature
+% 获取特征信息
 file_path = getappdata(0,'file_path');
 size_file_path = size(file_path);
 if (size_file_path(1)==0)
@@ -101,6 +104,8 @@ else
     full_name = file_path{1};
 end
 % full_name = 'E:\PDData\t1\t2\t3\t4\13.txt';
+% 读取数据并抽取信号
 [data] = read_pd_data(full_name);
 [features, data_cell] = extract_signal2(data, -1);
+% 自动识别
 auto_recog4(features, data, handles);

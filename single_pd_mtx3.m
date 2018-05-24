@@ -64,6 +64,7 @@ handles.output = hObject;
 % colormap gray
 % set(ha,'handlevisibility','off','visible','off');
 
+% 设定pop标签
 h_labels = char('局部放电', '电晕干扰', '周期干扰', '随机干扰');
 set(handles.pop_human, 'string', h_labels);
 
@@ -93,7 +94,7 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % 开始----------------------------------------------------------------------------------------------------------------------------------------------------------
-%% read data
+%% read data 读取数据
 % 
 file_path = getappdata(0,'file_path');
 size_file_path = size(file_path);
@@ -105,10 +106,10 @@ else
     full_name = file_path{1};
 end
 
-%full_name = 'E:\PDData\s1\s2\s3\s4\64.txt';
+%full_name = 'E:\PDData\s1\s2\s3\s4\64.txt'; 获得目标地址
 [filepath, name, ext] = fileparts(full_name);
     
-
+% 对放电数据进行迭代
 dir0 = dir(filepath);
 % iterate Hunterson
 full_names = cell(1,size(dir0,1)-2);
@@ -118,6 +119,7 @@ for i0 = 3:size(dir0,1)
     full_names{i0-2} = sub_path1;
 end
 
+% 设定数据cells
 N = length(full_names);
 data = cell(N,1);
 SavedSignal = cell(N,1);
@@ -126,13 +128,15 @@ NoShakeSignalStartMaxStop = cell(N,1);
 ShakeSignalStartMaxStop = cell(N,1);
 ThresthodValue = 0;
 
+% 遍历文件，更新各个参数信息
 for i1 = 1:length(full_names)
+    % 定位库文件
     full_name = full_names{i1};
     rst_name = full_name;
     rst_name = [rst_name(1:length(rst_name)-4),'_sta.mat'];
     rst_name(1)='F';
     load(rst_name);
-
+    % 更新数据信息
     data{i1} = rst.data;
     SavedSignal{i1} = rst.SavedSignal;
     SavedSignal_SS = [SavedSignal_SS;rst.SavedSignal];
@@ -172,7 +176,7 @@ end
 %full_name = 'F:\局放GUI\data\1.5mm 11kv inception\C2Trace00006.trc';
 %full_name = 'E:\PDData\t1\t2\t3\t4\2.txt';
 
-
+% 更新handles
 handles.N = N;
 handles.full_name = full_name;
 handles.ThresthodValue = ThresthodValue;
@@ -190,7 +194,7 @@ guidata(hObject, handles);
 set(handles.currthre, 'string', num2str(handles.ThresthodValue));
 
 
-%% plot original data
+%% plot original data 画原始数据
 axes(handles.axes2);
 [handles] = plot_orig(handles);
 
@@ -201,7 +205,7 @@ set(handles.text_signal_cnt, 'string', num2str(length(SavedSignal_SS)));
 b = 1:length(SavedSignal_SS);
 set(handles.popupmenu1, 'string',  num2str(b'));
 
-%% prepare statis
+%% prepare statis 画统计参数
 l_rise_time = handles.SavedSignal_SS(:, 4);
 l_loc = handles.SavedSignal_SS(:, 1);
 l_flag = handles.SavedSignal_SS(:, 7);
@@ -209,14 +213,14 @@ l_pv = handles.SavedSignal_SS(:, 6);
 l_t = handles.SavedSignal_SS(:, 17);
 l_w = handles.SavedSignal_SS(:, 18);
 
-% normal pic
+% normal pic 
 axes(handles.axes7);
 plot(l_loc, l_flag.*l_pv, '.')
 plot20ms(max(abs(handles.SavedSignal_SS(:, 6))) * 1.1)
 xlabel('PD Location')
 ylabel('Peak Voltage')
 
-%% other things"
+%% other things" 更新pop值
 %labels = ["rise_time"; 'peak_voltage'; 't'; 'w'; 'loc'];
 labels = char('rise_time', 'peak_voltage',  't', 'w', 'loc');
 set(handles.pop_xlabel, 'string', labels);
@@ -230,7 +234,7 @@ select_idx = zeros(size(handles.SavedSignal, 1),1)==1 ;
 handles.select_idx = select_idx;
 guidata(hObject, handles);
 
-%% dual-polarsize
+%% dual-polarsize 极坐标图
 [pos_loc, pos_val, neg_loc, neg_val] = polarsize2(l_loc, l_pv, l_flag)
 axes(handles.axes9);
 polar(pos_loc, pos_val, 'bo')
@@ -249,7 +253,7 @@ function popupmenu1_Callback(hObject, eventdata, handles)
 
 idx = get(handles.popupmenu1, 'Value');
 
-%% plot concrete data
+%% plot concrete data 画脉冲数据
 axes(handles.axes3);
 m = handles.start_idxs(idx);
 n = handles.end_idxs(idx);
@@ -259,7 +263,7 @@ plot(m:n, handles.data(m:n),'r')
 hold off;
 
 
-%% plot origianl data with vertical line
+%% plot origianl data with vertical line 画原始数据并高亮
 axes(handles.axes2);
 
 [handles] = plot_orig(handles);
@@ -292,6 +296,7 @@ function pushbutton2_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+%更新局放库
 dlmwrite('F:\局放GUI\data_lib\pd_lib.csv', [handles.a,handles.b'], 'delimiter',',','-append');
 
 
@@ -301,6 +306,7 @@ function pushbutton3_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton3 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+% 更新干扰库
 dlmwrite('F:\局放GUI\data_lib\noise_lib.csv', [handles.a,handles.b'], 'delimiter',',','-append');
 
 
