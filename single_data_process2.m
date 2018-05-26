@@ -39,7 +39,7 @@ data=data*power_ratio/1000;
 % calculate signlas params
  
 %xiaodi的Kmeans中用到的参数：第一行是PD位置，第二行是PD种类，第三行是信号宽度，第四行是上升时间，第五行是幅值，第六行是极性
-SavedSignal=zeros(NoShakeSignalStartMaxStop(1,1),20);
+SavedSignal=zeros(NoShakeSignalStartMaxStop(1,1),34);
 SavedSignalForKmeans=zeros(NoShakeSignalStartMaxStop(1,1),18);
 SavedSignalForKohonenMappingSinglePulse=zeros(NoShakeSignalStartMaxStop(1,1),5);
 SavedSignalForKohonenMapingWhole20mS=zeros(1,11);
@@ -104,32 +104,32 @@ SavedSignalForKohonenMapingWhole20mSBuffer=zeros(1,5);
    SavedSignal(index,17)= T;  
    SavedSignal(index,18)= W;
    
-%          %% new feature for pd pulse
-%    % WAVELET
-%     %wavelet decomposition
-%      Evaluationdata_t = 1:length(Evaluationdata)
-%      %plot(Evaluationdata_t,Evaluationdata)
-%      [ED1,ED2,ED3,ED4,ED5,EA5]=WF_PARAMETER(Evaluationdata_t,Evaluationdata);
-%      SavedSignal(index,19)=ED1; %ED1
-%      SavedSignal(index,20)=ED2; %ED1
-%      SavedSignal(index,21)=ED3; %ED1
-%      SavedSignal(index,22)=ED4; %ED1
-%      SavedSignal(index,23)=ED5; %ED1
-%      SavedSignal(index,24)=EA5; %ED1
-%      %wavelet
-%      
-%     %wavelet energy
-%     [Ea5,Ea4,Ea3,Ea2,Ea1,Ed5,Ed4,Ed3,Ed2,Ed1]=WF_ENERGY(Evaluationdata_t,Evaluationdata)
-%     SavedSignal(index,25)=Ea5; %ED1
-%     SavedSignal(index,26)=Ea4; %ED1
-%     SavedSignal(index,27)=Ea3; %ED1
-%     SavedSignal(index,28)=Ea2; %ED1
-%     SavedSignal(index,29)=Ea1; %ED1
-%     SavedSignal(index,30)=Ed5; %ED1
-%     SavedSignal(index,31)=Ed4; %ED1
-%     SavedSignal(index,32)=Ed3; %ED1
-%     SavedSignal(index,33)=Ed2; %ED1
-%     SavedSignal(index,34)=Ed1; %ED1
+         %% new feature for pd pulse
+   % WAVELET
+    %wavelet decomposition
+     Evaluationdata_t = 1:length(Evaluationdata)
+     %plot(Evaluationdata_t,Evaluationdata)
+     [ED1,ED2,ED3,ED4,ED5,EA5]=WF_PARAMETER(Evaluationdata_t,Evaluationdata);
+     SavedSignal(index,19)=ED1; %ED1
+     SavedSignal(index,20)=ED2; %ED1
+     SavedSignal(index,21)=ED3; %ED1
+     SavedSignal(index,22)=ED4; %ED1
+     SavedSignal(index,23)=ED5; %ED1
+     SavedSignal(index,24)=EA5; %ED1
+     %wavelet
+     
+    %wavelet energy
+    [Ea5,Ea4,Ea3,Ea2,Ea1,Ed5,Ed4,Ed3,Ed2,Ed1]=WF_ENERGY(Evaluationdata_t,Evaluationdata)
+    SavedSignal(index,25)=Ea5; %ED1
+    SavedSignal(index,26)=Ea4; %ED1
+    SavedSignal(index,27)=Ea3; %ED1
+    SavedSignal(index,28)=Ea2; %ED1
+    SavedSignal(index,29)=Ea1; %ED1
+    SavedSignal(index,30)=Ed5; %ED1
+    SavedSignal(index,31)=Ed4; %ED1
+    SavedSignal(index,32)=Ed3; %ED1
+    SavedSignal(index,33)=Ed2; %ED1
+    SavedSignal(index,34)=Ed1; %ED1
     
 %     %EMD ENERGY
 %     E = EMD_ENERGY(Evaluationdata,3)
@@ -140,8 +140,8 @@ SavedSignalForKohonenMapingWhole20mSBuffer=zeros(1,5);
    
    
    % 19 20, start_idxs end_idxs
-   SavedSignal(index,19) = NoShakeSignalStartMaxStop(index, 2);
-   SavedSignal(index,20) = NoShakeSignalStartMaxStop(index, 8);
+%    SavedSignal(index,19) = NoShakeSignalStartMaxStop(index, 2);
+%    SavedSignal(index,20) = NoShakeSignalStartMaxStop(index, 8);
 
    %xiaodi的Kmeans中用到的参数：第一行是PD位置，第二行是PD种类，第三行是信号宽度，第四行是上升时间，第五行是幅值，第六行是极性
     
