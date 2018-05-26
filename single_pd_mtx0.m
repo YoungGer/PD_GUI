@@ -1,35 +1,35 @@
-function varargout = single_pd_mtx3(varargin)
-% SINGLE_PD_MTX3 MATLAB code for single_pd_mtx3.fig
-%      SINGLE_PD_MTX3, by itself, creates a new SINGLE_PD_MTX3 or raises the existing
+function varargout = single_pd_mtx0(varargin)
+% SINGLE_PD_MTX0 MATLAB code for single_pd_mtx0.fig
+%      SINGLE_PD_MTX0, by itself, creates a new SINGLE_PD_MTX0 or raises the existing
 %      singleton*.
 %
-%      H = SINGLE_PD_MTX3 returns the handle to a new SINGLE_PD_MTX3 or the handle to
+%      H = SINGLE_PD_MTX0 returns the handle to a new SINGLE_PD_MTX0 or the handle to
 %      the existing singleton*.
 %
-%      SINGLE_PD_MTX3('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in SINGLE_PD_MTX3.M with the given input arguments.
+%      SINGLE_PD_MTX0('CALLBACK',hObject,eventData,handles,...) calls the local
+%      function named CALLBACK in SINGLE_PD_MTX0.M with the given input arguments.
 %
-%      SINGLE_PD_MTX3('Property','Value',...) creates a new SINGLE_PD_MTX3 or raises the
+%      SINGLE_PD_MTX0('Property','Value',...) creates a new SINGLE_PD_MTX0 or raises the
 %      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before single_pd_mtx3_OpeningFcn gets called.  An
+%      applied to the GUI before single_pd_mtx0_OpeningFcn gets called.  An
 %      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to single_pd_mtx3_OpeningFcn via varargin.
+%      stop.  All inputs are passed to single_pd_mtx0_OpeningFcn via varargin.
 %
 %      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
 %      instance to run (singleton)".
 %
 % See also: GUIDE, GUIDATA, GUIHANDLES
 
-% Edit the above text to modify the response to help single_pd_mtx3
+% Edit the above text to modify the response to help single_pd_mtx0
 
-% Last Modified by GUIDE v2.5 17-May-2018 09:54:31
+% Last Modified by GUIDE v2.5 26-May-2018 19:19:00
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
                    'gui_Singleton',  gui_Singleton, ...
-                   'gui_OpeningFcn', @single_pd_mtx3_OpeningFcn, ...
-                   'gui_OutputFcn',  @single_pd_mtx3_OutputFcn, ...
+                   'gui_OpeningFcn', @single_pd_mtx0_OpeningFcn, ...
+                   'gui_OutputFcn',  @single_pd_mtx0_OutputFcn, ...
                    'gui_LayoutFcn',  [] , ...
                    'gui_Callback',   []);
 if nargin && ischar(varargin{1})
@@ -44,16 +44,16 @@ end
 % End initialization code - DO NOT EDIT
 
 
-% --- Executes just before single_pd_mtx3 is made visible.
-function single_pd_mtx3_OpeningFcn(hObject, eventdata, handles, varargin)
+% --- Executes just before single_pd_mtx0 is made visible.
+function single_pd_mtx0_OpeningFcn(hObject, eventdata, handles, varargin)
 % This function has no output args, see OutputFcn.
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-% varargin   command line arguments to single_pd_mtx3 (see VARARGIN)
+% varargin   command line arguments to single_pd_mtx0 (see VARARGIN)
 
 
-% Choose default command line output for single_pd_mtx3
+% Choose default command line output for single_pd_mtx0
 handles.output = hObject;
 
 % % add background
@@ -64,20 +64,20 @@ handles.output = hObject;
 % colormap gray
 % set(ha,'handlevisibility','off','visible','off');
 
-% 设定pop标签
+% 设定放电类型的标签并添加到pop中
 h_labels = char('局部放电', '电晕干扰', '周期干扰', '随机干扰');
 set(handles.pop_human, 'string', h_labels);
 
-pushbutton1_Callback(hObject, eventdata, handles)
+%pushbutton1_Callback(hObject, eventdata, handles)
 % Update handles structure
 guidata(hObject, handles);
 
-% UIWAIT makes single_pd_mtx3 wait for user response (see UIRESUME)
+% UIWAIT makes single_pd_mtx0 wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = single_pd_mtx3_OutputFcn(hObject, eventdata, handles) 
+function varargout = single_pd_mtx0_OutputFcn(hObject, eventdata, handles) 
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -88,159 +88,11 @@ varargout{1} = handles.output;
 
 
 % --- Executes on button press in pushbutton1.
-function pushbutton1_Callback(hObject, eventdata, handles)
+
 % hObject    handle to pushbutton1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% 开始----------------------------------------------------------------------------------------------------------------------------------------------------------
-%% read data 读取数据
-% 
-file_path = getappdata(0,'file_path');
-size_file_path = size(file_path);
-
-if (size_file_path(1)==0)
-    [filename, filepath] = uigetfile('*');
-    full_name = [filepath filename];
-else
-    full_name = file_path{1};
-end
-
-%full_name = 'E:\PDData\s1\s2\s3\s4\64.txt'; 获得目标地址
-[filepath, name, ext] = fileparts(full_name);
-    
-% 对放电数据进行迭代
-dir0 = dir(filepath);
-% iterate Hunterson
-full_names = cell(1,size(dir0,1)-2);
-for i0 = 3:size(dir0,1)
-    name1 = dir0(i0).name;
-    sub_path1 = fullfile(filepath, dir0(i0).name);  %Hunterson
-    full_names{i0-2} = sub_path1;
-end
-
-% 设定数据cells
-N = length(full_names);
-data = cell(N,1);
-SavedSignal = cell(N,1);
-SavedSignal_SS = [];
-NoShakeSignalStartMaxStop = cell(N,1);
-ShakeSignalStartMaxStop = cell(N,1);
-ThresthodValue = 0;
-
-% 遍历文件，更新各个参数信息
-for i1 = 1:length(full_names)
-    % 定位库文件
-    full_name = full_names{i1};
-    rst_name = full_name;
-    rst_name = [rst_name(1:length(rst_name)-4),'_sta.mat'];
-    rst_name(1)='F';
-    load(rst_name);
-    % 更新数据信息
-    data{i1} = rst.data;
-    SavedSignal{i1} = rst.SavedSignal;
-    SavedSignal_SS = [SavedSignal_SS;rst.SavedSignal];
-    NoShakeSignalStartMaxStop{i1} = rst.NoShakeSignalStartMaxStop;
-    ShakeSignalStartMaxStop{i1} = rst.ShakeSignalStartMaxStop;
-    ThresthodValue = max(ThresthodValue, rst.ThresthodValue);
-    
-%     data = [data, rst.data];
-%     SavedSignal = [SavedSignal; rst.SavedSignal];
-%     NoShakeSignalStartMaxStop = [NoShakeSignalStartMaxStop; rst.NoShakeSignalStartMaxStop];
-%     ShakeSignalStartMaxStop = [ShakeSignalStartMaxStop; rst.ShakeSignalStartMaxStop];
-%     ThresthodValue = max(ThresthodValue, rst.ThresthodValue);
-end
-
-% data_size = size(data);
-% m = data_size(1);
-% n = data_size(2);
-
-% new_data = []
-% for i=1:m
-%     max_abs_ele = 0;
-%     val = 0;
-%     for j=1:n
-%         if (abs(data(i,j))>max_abs_ele)
-%             max_abs_ele = abs(data(i,j));
-%             val = data(i,j);
-%         end
-%     end
-%     new_data = [new_data;val];
-% end
-
-% datas = data;
-%data = max(data, [], 2);
-
-%full_name = 'F:\局放GUI\PDData2\data\C1_12EG018A002__2012_06_14_12_07_38.txt';
-%full_name = 'F:\局放GUI\data\small2\C2Trace00016.trc';
-%full_name = 'F:\局放GUI\data\1.5mm 11kv inception\C2Trace00006.trc';
-%full_name = 'E:\PDData\t1\t2\t3\t4\2.txt';
-
-% 更新handles
-handles.N = N;
-handles.full_name = full_name;
-handles.ThresthodValue = ThresthodValue;
-handles.SavedSignal = SavedSignal;
-handles.SavedSignal_SS = SavedSignal_SS;
-handles.data = data;
-handles.NoShakeSignalStartMaxStop = NoShakeSignalStartMaxStop;
-handles.ShakeSignalStartMaxStop = ShakeSignalStartMaxStop;
-
-setappdata(0, 'SavedSignal_SS', SavedSignal_SS); 
-%SavedSignal_SS = getappdata(0,'SavedSignal_SS');
-
-guidata(hObject, handles);
-
-set(handles.currthre, 'string', num2str(handles.ThresthodValue));
-
-
-%% plot original data 画原始数据
-axes(handles.axes2);
-[handles] = plot_orig(handles);
-
-set(handles.text_signal_cnt, 'string', num2str(length(SavedSignal_SS)));
-
-
-%b = 1:length(handles.start_idxs);
-b = 1:length(SavedSignal_SS);
-set(handles.popupmenu1, 'string',  num2str(b'));
-
-%% prepare statis 画统计参数
-l_rise_time = handles.SavedSignal_SS(:, 4);
-l_loc = handles.SavedSignal_SS(:, 1);
-l_flag = handles.SavedSignal_SS(:, 7);
-l_pv = handles.SavedSignal_SS(:, 6);
-l_t = handles.SavedSignal_SS(:, 17);
-l_w = handles.SavedSignal_SS(:, 18);
-
-% normal pic 
-axes(handles.axes7);
-plot(l_loc, l_flag.*l_pv, '.')
-plot20ms(max(abs(handles.SavedSignal_SS(:, 6))) * 1.1)
-xlabel('PD Location')
-ylabel('Peak Voltage')
-
-%% other things" 更新pop值
-%labels = ["rise_time"; 'peak_voltage'; 't'; 'w'; 'loc'];
-labels = char('rise_time', 'peak_voltage',  't', 'w', 'loc');
-set(handles.pop_xlabel, 'string', labels);
-set(handles.pop_ylabel, 'string', labels);
-set(handles.pop_bar, 'string', labels);
-set(handles.fu1, 'string', labels);
-set(handles.fu2, 'string', labels);
-set(handles.fu3, 'string', labels);
-
-select_idx = zeros(size(handles.SavedSignal, 1),1)==1 ;
-handles.select_idx = select_idx;
-guidata(hObject, handles);
-
-%% dual-polarsize 极坐标图
-[pos_loc, pos_val, neg_loc, neg_val] = polarsize2(l_loc, l_pv, l_flag)
-axes(handles.axes9);
-polar(pos_loc, pos_val, 'b.')
-hold on;
-polar(neg_loc, neg_val, 'rx')
-hold off;
 
 % --- Executes on selection change in popupmenu1.
 function popupmenu1_Callback(hObject, eventdata, handles)
@@ -251,9 +103,11 @@ function popupmenu1_Callback(hObject, eventdata, handles)
 % Hints: contents = cellstr(get(hObject,'String')) returns popupmenu1 contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from popupmenu1
 
+% 获得标签
 idx = get(handles.popupmenu1, 'Value');
 
-%% plot concrete data 画脉冲数据
+%% plot concrete data
+% 画脉冲图
 axes(handles.axes3);
 m = handles.start_idxs(idx);
 n = handles.end_idxs(idx);
@@ -263,7 +117,8 @@ plot(m:n, handles.data(m:n),'r')
 hold off;
 
 
-%% plot origianl data with vertical line 画原始数据并高亮
+%% plot origianl data with vertical line
+% 在原始信号下对脉冲进行高亮
 axes(handles.axes2);
 
 [handles] = plot_orig(handles);
@@ -296,7 +151,8 @@ function pushbutton2_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-%更新局放库
+
+% 写入局放库
 dlmwrite('F:\局放GUI\data_lib\pd_lib.csv', [handles.a,handles.b'], 'delimiter',',','-append');
 
 
@@ -306,7 +162,8 @@ function pushbutton3_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton3 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-% 更新干扰库
+
+% 写入干扰库
 dlmwrite('F:\局放GUI\data_lib\noise_lib.csv', [handles.a,handles.b'], 'delimiter',',','-append');
 
 
@@ -340,17 +197,16 @@ function pushbutton4_Callback(hObject, eventdata, handles)
 
 % 刷新---------------------------------------------------------------------------------------------------------------------------------------
 
-data = handles.data;
-%[data] = read_pd_data(handles.full_name);
+[data] = read_pd_data(handles.full_name);
 
-%% extract signal
+%% extract signal 提取信号
 pre_thre = str2double(get(handles.thre, 'string'));
 [handles] = extract_signal(data, pre_thre, handles);
 
 set(handles.currthre, 'string', num2str(handles.ThresthodValue));
 
 
-%% plot original data
+%% plot original data 画原始数据
 axes(handles.axes2);
 [handles] = plot_orig(handles);
 
@@ -387,7 +243,7 @@ set(handles.popupmenu1, 'string',  num2str(b'));
 
 handles.select_idx = select_idx;
 
-%% plot select data point
+%% plot select data point  画选中的脉冲数据
 % in original plot
 axes(handles.axes2);
 hold on;
@@ -400,7 +256,7 @@ for i = 1:length(handles.start_idxs)
 end
 hold off;
 
-%% prepare statis
+%% prepare statis 画统计参数数据
 
 %{'rise_time'; 'peak_voltage',  't'; 'w'; 'loc'};
 plot_statis_mtx(handles);
@@ -421,6 +277,7 @@ function pop_xlabel_Callback(hObject, eventdata, handles)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns pop_xlabel contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from pop_xlabel
+% 选择特征后画统计图
 plot_statis_mtx(handles);
 
 % --- Executes during object creation, after setting all properties.
@@ -444,6 +301,7 @@ function pop_ylabel_Callback(hObject, eventdata, handles)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns pop_ylabel contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from pop_ylabel
+% 选择特征后画统计图
 plot_statis_mtx(handles);
 
 % --- Executes during object creation, after setting all properties.
@@ -564,12 +422,13 @@ function pop_bar_Callback(hObject, eventdata, handles)
 % ----------------------------------------------------------------------------------------------------------------------------
 idx = get(handles.pop_bar, 'Value');
 
-l_flag = handles.SavedSignal_SS(:, 7);
-l_rise_time = handles.SavedSignal_SS(:, 4);
-l_loc = handles.SavedSignal_SS(:, 1);
-l_pv = handles.SavedSignal_SS(:, 6) .* l_flag;
-l_t = handles.SavedSignal_SS(:, 17);
-l_w = handles.SavedSignal_SS(:, 18);
+% 获得统计参数信息
+l_flag = handles.SavedSignal(:, 7);
+l_rise_time = handles.SavedSignal(:, 4);
+l_loc = handles.SavedSignal(:, 1);
+l_pv = handles.SavedSignal(:, 6) .* l_flag;
+l_t = handles.SavedSignal(:, 17);
+l_w = handles.SavedSignal(:, 18);
 
 c = containers.Map;
 c('1') = l_rise_time;
@@ -578,6 +437,7 @@ c('3') = l_t;
 c('4') = l_w;
 c('5') = l_loc;
 
+% 画hist图
 axes(handles.axes8);
 hist(c(num2str(idx)));
 
@@ -810,10 +670,10 @@ function pushbutton5_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % recognize
-% 相位图谱识别模块
-prpd_auto_s;
-prpd_auto2_s;
-prpd_auto3_s;
+% 聚类识别模块
+prpd_auto; %聚类为3
+prpd_auto2; %聚类为2
+prpd_auto3;%聚类为1
 
 %dlmwrite('F:\局放GUI\data_lib\pd_lib.csv', handles.SavedSignal, 'delimiter',',','-append');
 
@@ -853,6 +713,7 @@ function pushbutton7_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 h_idx = handles.h_idx;
+% 获得放电类型的标签
 setappdata(0, 'h_idx', h_idx);
 guidata(hObject, handles);
 
@@ -862,8 +723,7 @@ function pushbutton8_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton8 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-% 查看数据模块
-chakan_data2;
+chakan_data;
 
 
 % --- Executes on button press in pushbutton9.
@@ -871,3 +731,119 @@ function pushbutton9_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton9 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in pushbutton10.
+function pushbutton10_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton10 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% 获得信号标签
+idx = get(handles.popupmenu1, 'Value');
+a = handles.a;
+setappdata(0, 'a', a);
+% 相似信号分析模块
+similar;
+
+
+% --- Executes on button press in pushbutton1.
+function pushbutton1_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% 选择样本
+% 开始----------------------------------------------------------------------------------------------------------------------------------------------------------
+%% read data 读取放电数据
+[filename, filepath] = uigetfile('E:\PDData\*');
+full_name = [filepath filename];
+
+% full_name = 'E:\PDData\s1\s2\s3\s4\77.txt';
+file_path = cell(1,1);
+file_path{1,1} = full_name;
+setappdata(0, 'file_path', file_path);
+    
+N=1;
+
+%full_name = 'F:\局放GUI\PDData2\data\C1_12EG018A002__2012_06_14_12_07_38.txt';
+%full_name = 'F:\局放GUI\data\small2\C2Trace00016.trc';
+%full_name = 'F:\局放GUI\data\1.5mm 11kv inception\C2Trace00006.trc';
+%full_name = 'E:\PDData\t1\t2\t3\t4\2.txt';
+
+% 建立库
+single_data_process2(full_name);
+
+% 更改文件名，获得库的位置
+rst_name = full_name;
+rst_name = [rst_name(1:length(rst_name)-4),'_sta.mat'];
+rst_name(1)='F';
+load(rst_name);
+
+% 载入库数据
+data = rst.data;
+SavedSignal = rst.SavedSignal;
+NoShakeSignalStartMaxStop = rst.NoShakeSignalStartMaxStop;
+ShakeSignalStartMaxStop = rst.ShakeSignalStartMaxStop;
+ThresthodValue = rst.ThresthodValue;
+
+handles.full_name = full_name;
+handles.ThresthodValue = ThresthodValue;
+handles.SavedSignal = SavedSignal;
+handles.data = data;
+handles.NoShakeSignalStartMaxStop = NoShakeSignalStartMaxStop;
+handles.ShakeSignalStartMaxStop = ShakeSignalStartMaxStop;
+handles.N = N;
+
+set(handles.currthre, 'string', num2str(handles.ThresthodValue));
+
+
+%% plot original data
+% 画原始的时序图形
+axes(handles.axes2);
+[handles] = plot_orig(handles);
+
+set(handles.text_signal_cnt, 'string', num2str(length(handles.start_idxs)));
+
+b = 1:length(handles.start_idxs);
+set(handles.popupmenu1, 'string',  num2str(b'));
+
+%% prepare statis
+% 画统计参数的图形
+l_rise_time = handles.SavedSignal(:, 4);
+l_loc = handles.SavedSignal(:, 1);
+l_flag = handles.SavedSignal(:, 7);
+l_pv = handles.SavedSignal(:, 6);
+l_t = handles.SavedSignal(:, 17);
+l_w = handles.SavedSignal(:, 18);
+
+% normal pic
+axes(handles.axes7);
+plot(l_loc, l_flag.*l_pv, '.')
+plot20ms(max(abs(handles.SavedSignal(:, 6))) * 1.1)
+xlabel('PD Location')
+ylabel('Peak Voltage')
+
+%% other things"
+% 设定gui的pop组数据
+%labels = ["rise_time"; 'peak_voltage'; 't'; 'w'; 'loc'];
+labels = char('rise_time', 'peak_voltage',  't', 'w', 'loc');
+set(handles.pop_xlabel, 'string', labels);
+set(handles.pop_ylabel, 'string', labels);
+set(handles.pop_bar, 'string', labels);
+set(handles.fu1, 'string', labels);
+set(handles.fu2, 'string', labels);
+set(handles.fu3, 'string', labels);
+
+select_idx = zeros(size(handles.SavedSignal, 1),1)==1 ;
+handles.select_idx = select_idx;
+guidata(hObject, handles);
+
+%% dual-polarsize
+% 画极坐标图形
+[pos_loc, pos_val, neg_loc, neg_val] = polarsize2(l_loc, l_pv, l_flag)
+axes(handles.axes9);
+polar(pos_loc, pos_val, 'b.')
+hold on;
+polar(neg_loc, neg_val, 'rx')
+hold off;

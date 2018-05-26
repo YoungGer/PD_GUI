@@ -182,7 +182,7 @@ guidata(hObject, handles);
 % »­¼«×ø±êÍ¼ÐÎ
 [pos_loc, pos_val, neg_loc, neg_val] = polarsize2(l_loc, l_pv, l_flag)
 axes(handles.axes9);
-polar(pos_loc, pos_val, 'bo')
+polar(pos_loc, pos_val, 'b.')
 hold on;
 polar(neg_loc, neg_val, 'rx')
 hold off;

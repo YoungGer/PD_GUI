@@ -403,7 +403,7 @@ ThresthodValue = ThresthodValue*power_ratio;
 
 hold off;
 axes(handles.axes11);
-plot(data);
+plot(data, 'y');
 hold on;
 
 % plot non-shake signals data (red)
@@ -417,7 +417,7 @@ end_idxs = NoShakeSignalStartMaxStop(1:idx-1, 8);
 for i = 1:length(start_idxs)
     m = start_idxs(i);
     n = end_idxs(i);
-    plot(m:n, data(m:n),'r')
+    plot(m:n, data(m:n),'k')
 end
 % plot shake signal data
 for idx = 1:max(1000, size(ShakeSignalStartMaxStop,1))

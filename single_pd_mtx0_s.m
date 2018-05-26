@@ -1,35 +1,35 @@
-function varargout = single_pd_mtx3(varargin)
-% SINGLE_PD_MTX3 MATLAB code for single_pd_mtx3.fig
-%      SINGLE_PD_MTX3, by itself, creates a new SINGLE_PD_MTX3 or raises the existing
+function varargout = single_pd_mtx0_s(varargin)
+% SINGLE_PD_MTX0_S MATLAB code for single_pd_mtx0_s.fig
+%      SINGLE_PD_MTX0_S, by itself, creates a new SINGLE_PD_MTX0_S or raises the existing
 %      singleton*.
 %
-%      H = SINGLE_PD_MTX3 returns the handle to a new SINGLE_PD_MTX3 or the handle to
+%      H = SINGLE_PD_MTX0_S returns the handle to a new SINGLE_PD_MTX0_S or the handle to
 %      the existing singleton*.
 %
-%      SINGLE_PD_MTX3('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in SINGLE_PD_MTX3.M with the given input arguments.
+%      SINGLE_PD_MTX0_S('CALLBACK',hObject,eventData,handles,...) calls the local
+%      function named CALLBACK in SINGLE_PD_MTX0_S.M with the given input arguments.
 %
-%      SINGLE_PD_MTX3('Property','Value',...) creates a new SINGLE_PD_MTX3 or raises the
+%      SINGLE_PD_MTX0_S('Property','Value',...) creates a new SINGLE_PD_MTX0_S or raises the
 %      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before single_pd_mtx3_OpeningFcn gets called.  An
+%      applied to the GUI before single_pd_mtx0_s_OpeningFcn gets called.  An
 %      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to single_pd_mtx3_OpeningFcn via varargin.
+%      stop.  All inputs are passed to single_pd_mtx0_s_OpeningFcn via varargin.
 %
 %      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
 %      instance to run (singleton)".
 %
 % See also: GUIDE, GUIDATA, GUIHANDLES
 
-% Edit the above text to modify the response to help single_pd_mtx3
+% Edit the above text to modify the response to help single_pd_mtx0_s
 
-% Last Modified by GUIDE v2.5 17-May-2018 09:54:31
+% Last Modified by GUIDE v2.5 26-May-2018 19:33:27
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
                    'gui_Singleton',  gui_Singleton, ...
-                   'gui_OpeningFcn', @single_pd_mtx3_OpeningFcn, ...
-                   'gui_OutputFcn',  @single_pd_mtx3_OutputFcn, ...
+                   'gui_OpeningFcn', @single_pd_mtx0_s_OpeningFcn, ...
+                   'gui_OutputFcn',  @single_pd_mtx0_s_OutputFcn, ...
                    'gui_LayoutFcn',  [] , ...
                    'gui_Callback',   []);
 if nargin && ischar(varargin{1})
@@ -44,16 +44,16 @@ end
 % End initialization code - DO NOT EDIT
 
 
-% --- Executes just before single_pd_mtx3 is made visible.
-function single_pd_mtx3_OpeningFcn(hObject, eventdata, handles, varargin)
+% --- Executes just before single_pd_mtx0_s is made visible.
+function single_pd_mtx0_s_OpeningFcn(hObject, eventdata, handles, varargin)
 % This function has no output args, see OutputFcn.
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-% varargin   command line arguments to single_pd_mtx3 (see VARARGIN)
+% varargin   command line arguments to single_pd_mtx0_s (see VARARGIN)
 
 
-% Choose default command line output for single_pd_mtx3
+% Choose default command line output for single_pd_mtx0_s
 handles.output = hObject;
 
 % % add background
@@ -68,16 +68,16 @@ handles.output = hObject;
 h_labels = char('局部放电', '电晕干扰', '周期干扰', '随机干扰');
 set(handles.pop_human, 'string', h_labels);
 
-pushbutton1_Callback(hObject, eventdata, handles)
+%pushbutton1_Callback(hObject, eventdata, handles)
 % Update handles structure
 guidata(hObject, handles);
 
-% UIWAIT makes single_pd_mtx3 wait for user response (see UIRESUME)
+% UIWAIT makes single_pd_mtx0_s wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = single_pd_mtx3_OutputFcn(hObject, eventdata, handles) 
+function varargout = single_pd_mtx0_s_OutputFcn(hObject, eventdata, handles) 
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -96,19 +96,21 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % 开始----------------------------------------------------------------------------------------------------------------------------------------------------------
 %% read data 读取数据
 % 
-file_path = getappdata(0,'file_path');
-size_file_path = size(file_path);
 
-if (size_file_path(1)==0)
-    [filename, filepath] = uigetfile('*');
-    full_name = [filepath filename];
-else
-    full_name = file_path{1};
-end
+[filename, filepath] = uigetfile('E:\PDData\*');
+full_name = [filepath filename];
+
+% full_name = 'E:\PDData\s1\s2\s3\s4\77.txt';
+file_path = cell(1,1);
+file_path{1,1} = full_name;
+setappdata(0, 'file_path', file_path);
+
 
 %full_name = 'E:\PDData\s1\s2\s3\s4\64.txt'; 获得目标地址
 [filepath, name, ext] = fileparts(full_name);
     
+
+
 % 对放电数据进行迭代
 dir0 = dir(filepath);
 % iterate Hunterson
@@ -116,6 +118,9 @@ full_names = cell(1,size(dir0,1)-2);
 for i0 = 3:size(dir0,1)
     name1 = dir0(i0).name;
     sub_path1 = fullfile(filepath, dir0(i0).name);  %Hunterson
+    % 建库对文件
+    single_data_process2(sub_path1);
+    % 重命名
     full_names{i0-2} = sub_path1;
 end
 

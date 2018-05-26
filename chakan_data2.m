@@ -77,9 +77,9 @@ handles.output = hObject;
 
 SavedSignal = getappdata(0,'SavedSignal_SS');
 
-set(handles.tt, 'data', SavedSignal(:,1:18));  % 前4个是地点，第5个文件，第6，7是系统，人工标注的放电个数，8 is location
+set(handles.tt, 'data', SavedSignal(:,1:34));  % 前4个是地点，第5个文件，第6，7是系统，人工标注的放电个数，8 is location
 
-handles.curr_data = SavedSignal(:,1:18);
+handles.curr_data = SavedSignal(:,1:34);
 
 % Update handles structure
 guidata(hObject, handles);
