@@ -51,6 +51,12 @@ for i = 1:k
     length(pos_theta);
     length(neg_theta);
     
+    %将极坐标投影到x,y轴上
+    pos_x = pos_pv.*cos(pos_theta);
+    pos_y = pos_pv.*sin(pos_theta);
+    neg_x = neg_pv.*cos(neg_theta);
+    neg_y = neg_pv.*sin(neg_theta);
+    
     
     %% k==1 单相放电
 
@@ -58,10 +64,26 @@ for i = 1:k
         display('no k==1');
     else    
         % 计算聚类中心
-        pos_ctr_theta = mean(pos_theta);
-        pos_ctr_pv = mean(pos_pv);
-        neg_ctr_theta = mean(neg_theta);
-        neg_ctr_pv = mean(neg_pv);
+        
+        % 计算聚类中心
+        [pos_idx1, pos_ctrs1_] = kmeans([pos_x, pos_y], 1);
+        [neg_idx1, neg_ctrs1_] = kmeans([neg_x, neg_y], 1);
+        % 坐标变换
+        [pos_theta_, pos_rho_] = cart2pol(pos_ctrs1_(:,1), pos_ctrs1_(:,2))
+        [neg_theta_, neg_rho_] = cart2pol(neg_ctrs1_(:,1), neg_ctrs1_(:,2))
+        pos_ctrs1 = [pos_theta_, pos_rho_];
+        neg_ctrs1 = [neg_theta_, neg_rho_];
+        
+%         
+%         pos_ctrs1 = [mean([pos_theta(pos_idx1==1), pos_pv(pos_idx1==1)], 1)];
+%         neg_ctrs1 = [mean([neg_theta(neg_idx1==1), neg_pv(neg_idx1==1)], 1)];
+    
+    
+        pos_ctr_theta = pos_ctrs1(1);
+        pos_ctr_pv = pos_ctrs1(2);
+        neg_ctr_theta = neg_ctrs1(1);
+        neg_ctr_pv = neg_ctrs1(2);
+        
         diff_angle = abs(pos_ctr_theta-neg_ctr_theta);
         display('!!!k=1');
         display(diff_angle) ;
@@ -91,7 +113,7 @@ for i = 1:k
         hold on;
         polar(pos_ctr_theta, pos_ctr_pv, 'bo' )
         polar(pos_ctr_theta, pos_ctr_pv, 'bx' )
-        polar(neg_theta, neg_pv, 'r^')
+        polar(neg_theta, neg_pv, 'r.')
         polar(neg_ctr_theta, neg_ctr_pv, 'ro')
         polar(neg_ctr_theta, neg_ctr_pv, 'rx')
         hold off;
@@ -104,8 +126,26 @@ for i = 1:k
         display('no k==2');
     else
         % 计算聚类中心
-        [pos_idx2, pos_ctrs2] = kmeans([pos_theta, pos_pv], 2);
-        [neg_idx2, neg_ctrs2] = kmeans([neg_theta, neg_pv], 2);
+        [pos_idx2, pos_ctrs2_] = kmeans([pos_x, pos_y], 2);
+        [neg_idx2, neg_ctrs2_] = kmeans([neg_x, neg_y], 2);
+        % 坐标变换
+        [pos_theta_, pos_rho_] = cart2pol(pos_ctrs2_(:,1), pos_ctrs2_(:,2))
+        [neg_theta_, neg_rho_] = cart2pol(neg_ctrs2_(:,1), neg_ctrs2_(:,2))
+        pos_ctrs2 = [pos_theta_, pos_rho_];
+        neg_ctrs2 = [neg_theta_, neg_rho_];
+        
+%         pos_ctrs2 = [mean([pos_theta(pos_idx2==1), pos_pv(pos_idx2==1)], 1);
+%         mean([pos_theta(pos_idx2==2), pos_pv(pos_idx2==2)], 1)];
+%         neg_ctrs2 = [mean([neg_theta(neg_idx2==1), neg_pv(neg_idx2==1)], 1);
+%         mean([neg_theta(neg_idx2==2), neg_pv(neg_idx2==2)], 1)];
+        
+        display('pos_ctrs2');
+        display(pos_ctrs2);
+        display('neg_ctrs2');
+        display(neg_ctrs2);
+        
+%         [pos_idx2, pos_ctrs2] = kmeans([pos_theta, pos_pv], 2);
+%         [neg_idx2, neg_ctrs2] = kmeans([neg_theta, neg_pv], 2);
 
         if (i==1)
             axes(handles.axes4);
@@ -120,14 +160,14 @@ for i = 1:k
         hold on;
         polar(pos_ctrs2(1,1), pos_ctrs2(1,2), 'bo' )
         polar(pos_ctrs2(1,1), pos_ctrs2(1,2), 'bx' )
-        polar(pos_theta(pos_idx2==2), pos_pv(pos_idx2==2), 'b+')
+        polar(pos_theta(pos_idx2==2), pos_pv(pos_idx2==2), 'b.')
         polar(pos_ctrs2(2,1), pos_ctrs2(2,2), 'bo' )
         polar(pos_ctrs2(2,1), pos_ctrs2(2,2), 'bx' )
 
         polar(neg_theta(neg_idx2==1), neg_pv(neg_idx2==1), 'r.')
         polar(neg_ctrs2(1,1), neg_ctrs2(1,2), 'ro' )
         polar(neg_ctrs2(1,1), neg_ctrs2(1,2), 'rx' )
-        polar(neg_theta(neg_idx2==2), neg_pv(neg_idx2==2), 'r+')
+        polar(neg_theta(neg_idx2==2), neg_pv(neg_idx2==2), 'r.')
         polar(neg_ctrs2(2,1), neg_ctrs2(2,2), 'ro' )
         polar(neg_ctrs2(2,1), neg_ctrs2(2,2), 'rx' )
         hold off;
@@ -168,9 +208,24 @@ for i = 1:k
     else
         % k==3
         % 计算聚类中心
-        [pos_idx3, pos_ctrs3] = kmeans([pos_theta, pos_pv], 3);
-        [neg_idx3, neg_ctrs3] = kmeans([neg_theta, neg_pv], 3);
+        [pos_idx3, pos_ctrs3_] = kmeans([pos_x, pos_y], 3);
+        [neg_idx3, neg_ctrs3_] = kmeans([neg_x, neg_y], 3);
 
+        
+        % 坐标变换
+        [pos_theta_, pos_rho_] = cart2pol(pos_ctrs3_(:,1), pos_ctrs3_(:,2))
+        [neg_theta_, neg_rho_] = cart2pol(neg_ctrs3_(:,1), neg_ctrs3_(:,2))
+        pos_ctrs3 = [pos_theta_, pos_rho_];
+        neg_ctrs3 = [neg_theta_, neg_rho_];
+        
+        
+%         pos_ctrs3 = [mean([pos_theta(pos_idx3==1), pos_pv(pos_idx3==1)], 1);
+%         mean([pos_theta(pos_idx3==2), pos_pv(pos_idx3==2)], 1);
+%         mean([pos_theta(pos_idx3==3), pos_pv(pos_idx3==3)], 1)];
+%         neg_ctrs3 = [mean([neg_theta(neg_idx3==1), neg_pv(neg_idx3==1)], 1);
+%         mean([neg_theta(neg_idx3==2), neg_pv(neg_idx3==2)], 1);
+%         mean([neg_theta(neg_idx3==3), neg_pv(neg_idx3==3)], 1)];
+        
         if (i==1)
             axes(handles.axes7);
         elseif (i==2)
@@ -184,20 +239,21 @@ for i = 1:k
         hold on;
         polar(pos_ctrs3(1,1), pos_ctrs3(1,2), 'bo' )
         polar(pos_ctrs3(1,1), pos_ctrs3(1,2), 'bx' )
-        polar(pos_theta(pos_idx3==2), pos_pv(pos_idx3==2), 'b+')
+        polar(pos_theta(pos_idx3==2), pos_pv(pos_idx3==2), 'b.')
         polar(pos_ctrs3(2,1), pos_ctrs3(2,2), 'bo' )
         polar(pos_ctrs3(2,1), pos_ctrs3(2,2), 'bx' )
-        polar(pos_theta(pos_idx3==3), pos_pv(pos_idx3==3), 'bx')
+        
+        polar(pos_theta(pos_idx3==3), pos_pv(pos_idx3==3), 'b.')
         polar(pos_ctrs3(3,1), pos_ctrs3(3,2), 'bo' )
         polar(pos_ctrs3(3,1), pos_ctrs3(3,2), 'bx' )
 
         polar(neg_theta(neg_idx3==1), neg_pv(neg_idx3==1), 'r.')
         polar(neg_ctrs3(1,1), neg_ctrs3(1,2), 'ro' )
         polar(neg_ctrs3(1,1), neg_ctrs3(1,2), 'rx' )
-        polar(neg_theta(neg_idx3==2), neg_pv(neg_idx3==2), 'r+')
+        polar(neg_theta(neg_idx3==2), neg_pv(neg_idx3==2), 'r.')
         polar(neg_ctrs3(2,1), neg_ctrs3(2,2), 'ro' )
         polar(neg_ctrs3(2,1), neg_ctrs3(2,2), 'rx' )
-        polar(neg_theta(neg_idx3==3), neg_pv(neg_idx3==3), 'rx')
+        polar(neg_theta(neg_idx3==3), neg_pv(neg_idx3==3), 'r.')
         polar(neg_ctrs3(3,1), neg_ctrs3(3,2), 'ro' )
         polar(neg_ctrs3(3,1), neg_ctrs3(3,2), 'rx' )
         hold off;
@@ -226,13 +282,13 @@ for i = 1:k
            ((neg_angle3>pi/3*0.9 & neg_angle3<60*1.1) | (neg_angle3>pi*2/3*0.9 & neg_angle3<pi*2/3*1.1))   & ...
            ((neg_angle4>pi/3*0.9 & neg_angle4<60*1.1) | (neg_angle4>pi*2/3*0.9 & neg_angle4<pi*2/3*1.1))   
            display('!!!pd') 
-           pd = 2;
+           pd = 3;
            if (i==1)
-               set(handles.text13, 'string', '发现');
+               set(handles.text14, 'string', '发现');
            elseif(i==2)
-               set(handles.text16, 'string', '发现');
+               set(handles.text17, 'string', '发现');
            elseif(i==3)
-               set(handles.text19, 'string', '发现');
+               set(handles.text20, 'string', '发现');
            end
         end
 

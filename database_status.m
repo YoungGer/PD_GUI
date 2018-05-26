@@ -36,6 +36,7 @@ if (refresh)
     save('./lib/rst.mat', 'rst');
     % for chinese show 中文显现
     for j=1:length(rst)
+        % 专家判断的转换
         if (rst{j,7}==1)
             rst{j,7} = '局部放电';
         elseif (rst{j,7}==2)
@@ -46,6 +47,18 @@ if (refresh)
             rst{j,7} = '随机干扰';
         else
             rst{j,7} = '待定';
+        end
+        % 自动判断的转换
+        if (rst{j,6}==1)
+            rst{j,6} = '单相放电';
+        elseif (rst{j,6}==2)
+            rst{j,6} = '两相放电';
+        elseif (rst{j,6}==3)
+            rst{j,6} = '三相放电';
+        elseif (rst{j,6}==0)
+            rst{j,6} = '未发现放电';
+        else
+            rst{j,6} = '待定';
         end
     end
     return;

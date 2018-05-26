@@ -22,7 +22,7 @@ function varargout = prpd_auto(varargin)
 
 % Edit the above text to modify the response to help prpd_auto
 
-% Last Modified by GUIDE v2.5 14-May-2018 17:10:55
+% Last Modified by GUIDE v2.5 24-May-2018 20:21:11
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -107,3 +107,11 @@ end
 [features, data_cell] = extract_signal2(data, -1);
 % 自动识别
 auto_recog2(features, data, handles);
+
+
+% --- Executes during object creation, after setting all properties.
+% hObject    handle to axes2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: place code in OpeningFcn to populate axes2

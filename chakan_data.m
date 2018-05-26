@@ -106,4 +106,5 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 curr_data = handles.curr_data;
 % 选择储存的目的文件地址
-uisave('curr_data');
+%uisave('curr_data');
+csvwrite('exam.csv', curr_data)

@@ -85,7 +85,7 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % Çå³ýÍ¼Æ¬
 cla(handles.axes1);
 %cla(handles.axes2);
-%cla(handles.axes3);
+%cla(handles.axes3);  
 cla(handles.axes4);
 %cla(handles.axes5);
 %cla(handles.axes6);

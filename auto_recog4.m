@@ -46,20 +46,49 @@ for i = 1:k
     length(pos_theta);
     length(neg_theta);
     
+        
+    %将极坐标投影到x,y轴上
+    pos_x = pos_pv.*cos(pos_theta);
+    pos_y = pos_pv.*sin(pos_theta);
+    neg_x = neg_pv.*cos(neg_theta);
+    neg_y = neg_pv.*sin(neg_theta);
+    
     
     %% k==1
 
     if (length(pos_theta)<1 | length(neg_theta)<1) 
         display('no k==1');
     else    
-        pos_ctr_theta = mean(pos_theta);
-        pos_ctr_pv = mean(pos_pv);
-        neg_ctr_theta = mean(neg_theta);
-        neg_ctr_pv = mean(neg_pv);
+        
+        % 计算聚类中心
+        [pos_idx1, pos_ctrs1_] = kmeans([pos_x, pos_y], 1);
+        [neg_idx1, neg_ctrs1_] = kmeans([neg_x, neg_y], 1);
+        % 坐标变换
+        [pos_theta_, pos_rho_] = cart2pol(pos_ctrs1_(:,1), pos_ctrs1_(:,2))
+        [neg_theta_, neg_rho_] = cart2pol(neg_ctrs1_(:,1), neg_ctrs1_(:,2))
+        pos_ctrs1 = [pos_theta_, pos_rho_];
+        neg_ctrs1 = [neg_theta_, neg_rho_];
+        
+        
+        pos_ctr_theta = pos_ctrs1(1);
+        pos_ctr_pv = pos_ctrs1(2);
+        neg_ctr_theta = neg_ctrs1(1);
+        neg_ctr_pv = neg_ctrs1(2);
+        
+%         pos_ctr_theta = mean(pos_theta);
+%         pos_ctr_pv = mean(pos_pv);
+%         neg_ctr_theta = mean(neg_theta);
+%         neg_ctr_pv = mean(neg_pv);
+        
+        
         diff_angle = abs(pos_ctr_theta-neg_ctr_theta);
         if (diff_angle>pi*0.9 & diff_angle<pi*1.1)  %放电判据
            display('!!!pd') ;
            pd = 1;
+           %text12
+            if (i==1)
+               set(handles.text12, 'string', '发现');
+           end
         end
 
         % plot
@@ -74,7 +103,7 @@ for i = 1:k
         hold on;
         polar(pos_ctr_theta, pos_ctr_pv, 'bo' )
         polar(pos_ctr_theta, pos_ctr_pv, 'bx' )
-        polar(neg_theta, neg_pv, 'r^')
+        polar(neg_theta, neg_pv, 'r.')
         polar(neg_ctr_theta, neg_ctr_pv, 'ro')
         polar(neg_ctr_theta, neg_ctr_pv, 'rx')
         hold off;
@@ -86,8 +115,16 @@ for i = 1:k
     if (length(pos_theta)<2 | length(neg_theta)<2) 
         display('no k==2');
     else
-        [pos_idx2, pos_ctrs2] = kmeans([pos_theta, pos_pv], 2);
-        [neg_idx2, neg_ctrs2] = kmeans([neg_theta, neg_pv], 2);
+        
+        % 计算聚类中心
+        [pos_idx2, pos_ctrs2_] = kmeans([pos_x, pos_y], 2);
+        [neg_idx2, neg_ctrs2_] = kmeans([neg_x, neg_y], 2);
+        % 坐标变换
+        [pos_theta_, pos_rho_] = cart2pol(pos_ctrs2_(:,1), pos_ctrs2_(:,2))
+        [neg_theta_, neg_rho_] = cart2pol(neg_ctrs2_(:,1), neg_ctrs2_(:,2))
+        pos_ctrs2 = [pos_theta_, pos_rho_];
+        neg_ctrs2 = [neg_theta_, neg_rho_];
+       
 
         if (i==1)
             axes(handles.axes4);
@@ -130,6 +167,13 @@ for i = 1:k
            ((neg_angle2>pi/3*0.9 & neg_angle2<pi/3*1.1) | (neg_angle2>pi*2/3*0.9 & neg_angle2<pi*2/3*1.1))
            display('!!!pd') 
            pd = 2;
+            %text13 %text12
+            if (i==1)
+               set(handles.text12, 'string', '发现');
+           end
+            if (i==1)
+               set(handles.text13, 'string', '发现');
+           end
         end
     end
 
@@ -139,8 +183,20 @@ for i = 1:k
         display('no k==3');
     else
         % k==3
-        [pos_idx3, pos_ctrs3] = kmeans([pos_theta, pos_pv], 3);
-        [neg_idx3, neg_ctrs3] = kmeans([neg_theta, neg_pv], 3);
+%         [pos_idx3, pos_ctrs3] = kmeans([pos_theta, pos_pv], 3);
+%         [neg_idx3, neg_ctrs3] = kmeans([neg_theta, neg_pv], 3);
+
+        % k==3
+        % 计算聚类中心
+        [pos_idx3, pos_ctrs3_] = kmeans([pos_x, pos_y], 3);
+        [neg_idx3, neg_ctrs3_] = kmeans([neg_x, neg_y], 3);
+
+        
+        % 坐标变换
+        [pos_theta_, pos_rho_] = cart2pol(pos_ctrs3_(:,1), pos_ctrs3_(:,2))
+        [neg_theta_, neg_rho_] = cart2pol(neg_ctrs3_(:,1), neg_ctrs3_(:,2))
+        pos_ctrs3 = [pos_theta_, pos_rho_];
+        neg_ctrs3 = [neg_theta_, neg_rho_];
 
         if (i==1)
             axes(handles.axes7);
@@ -195,6 +251,10 @@ for i = 1:k
            ((neg_angle4>pi/3*0.9 & neg_angle4<60*1.1) | (neg_angle4>pi*2/3*0.9 & neg_angle4<pi*2/3*1.1))   
            display('!!!pd') 
            pd = 3;
+            %text14
+            if (i==1)
+               set(handles.text14, 'string', '发现');
+           end
         end
     end
     

@@ -206,7 +206,11 @@ function pushbutton7_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-main_path = 'E:\PDData';
+% 找到之前的rst
+rst = load('./lib/rst.mat');
+orig_rst = rst.rst;
+
+main_path = 'E:\PDData'; % 原始文件
 %% get initial data， 遍历得到所有放电文件的位置信息
 dir0 = dir(main_path);
 % iterate Hunterson
@@ -241,8 +245,22 @@ for i0 = 3:size(dir0,1)
                     single_name{1,3} = name3;
                     single_name{1,4} = name4; % date
                     single_name{1,5} = name5; % file
-                    single_name{1,6} = -1;
-                    single_name{1,7} = -1;
+                    % 在原始的rst中寻找数据，更新6,7
+                    find_flag = 0;
+                    for j =1:length(orig_rst)
+                        sub_cell = cell(1,1);
+                        sub_cell{1,1} = sub_path5;
+                        if isequal(orig_rst(j, 8), sub_cell)
+                            single_name{1,6} = orig_rst{j,6};
+                            single_name{1,7} = orig_rst{j,7};
+                            find_flag = 1;
+                            break
+                        end
+                    end
+                    if (find_flag==0)
+                        single_name{1,6} = -1;
+                        single_name{1,7} = -1;
+                    end
 %                     if (size_h_idx(1)~=0 & size_file_path(1)~=0 & isequal(file_path{1}, sub_path5))
 %                         single_name{1,7} = h_idx;
 %                     else
@@ -262,7 +280,7 @@ end
 %dlmwrite('./lib/rst.txt', cell2table(rst));
 % 重新写入
 save('./lib/rst.mat', 'rst');
-
+display('finish');
 
 % --- Executes on button press in pushbutton8.
 function pushbutton8_Callback(hObject, eventdata, handles)
@@ -271,13 +289,40 @@ function pushbutton8_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % 载入数据库
-rst = load('./lib/rst.mat');
-rst = rst.rst;
-N = length(rst);
+
+rst = handles.table_cell;
+display('rst');
+display(size(rst));
+%rst = load('./lib/rst.mat');
+%rst = rst.rst;
+N = size(rst);
+N = N(1);
+display(N);
 % 对数据库进行遍历更新
+full_name_cell = cell(1,1);
+% 原始的数据库
+rst_disk = load('./lib/rst.mat');
+rst_disk = rst_disk.rst;
+
 for i=1:N
     display(i);  %167 error
     full_name = rst(i,8);
     full_name = full_name{1};
+    % 建库
     single_data_process2(full_name);
+    % PRPD识别
+    [pd] = prpd_analysis(full_name);
+    % 更新原来的数据库
+    % iterate to find correspnd rst  找到对应需要更新的位置
+    for j=1:length(rst_disk)
+        full_name_cell{1,1} = full_name;
+        if isequal(rst_disk(j,8), full_name_cell)
+            rst_disk{j,6} = pd;
+            break;
+        end
+    end
 end
+% update rst  保存
+rst = rst_disk;
+save('./lib/rst.mat', 'rst');
+display('finish');
