@@ -119,7 +119,7 @@ for i0 = 3:size(dir0,1)
     name1 = dir0(i0).name;
     sub_path1 = fullfile(filepath, dir0(i0).name);  %Hunterson
     % 建库对文件
-    single_data_process2(sub_path1);
+    single_data_process2(sub_path1, 1.0);
     % 重命名
     full_names{i0-2} = sub_path1;
 end

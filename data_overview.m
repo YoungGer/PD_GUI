@@ -22,7 +22,7 @@ function varargout = data_overview(varargin)
 
 % Edit the above text to modify the response to help data_overview
 
-% Last Modified by GUIDE v2.5 23-May-2018 09:29:24
+% Last Modified by GUIDE v2.5 27-May-2018 14:55:18
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -304,14 +304,21 @@ full_name_cell = cell(1,1);
 rst_disk = load('./lib/rst.mat');
 rst_disk = rst_disk.rst;
 
+% 获得edit1， edit2中的数据
+thre_multi = str2double(get(handles.edit1, 'string'));
+prpd_multi = str2double(get(handles.edit2, 'string'));
+
+display(thre_multi)
+display(prpd_multi)
+
 for i=1:N
     display(i);  %167 error
     full_name = rst(i,8);
     full_name = full_name{1};
     % 建库
-    single_data_process2(full_name);
+    single_data_process2(full_name, thre_multi);
     % PRPD识别
-    [pd] = prpd_analysis(full_name);
+    [pd] = prpd_analysis(full_name, prpd_multi);
     % 更新原来的数据库
     % iterate to find correspnd rst  找到对应需要更新的位置
     for j=1:length(rst_disk)
@@ -326,3 +333,49 @@ end
 rst = rst_disk;
 save('./lib/rst.mat', 'rst');
 display('finish');
+
+
+
+function edit1_Callback(hObject, eventdata, handles)
+% hObject    handle to edit1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit1 as text
+%        str2double(get(hObject,'String')) returns contents of edit1 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit1_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit2_Callback(hObject, eventdata, handles)
+% hObject    handle to edit2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit2 as text
+%        str2double(get(hObject,'String')) returns contents of edit2 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit2_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end

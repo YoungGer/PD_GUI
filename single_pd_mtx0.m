@@ -772,7 +772,7 @@ N=1;
 %full_name = 'E:\PDData\t1\t2\t3\t4\2.txt';
 
 % 建立库
-single_data_process2(full_name);
+single_data_process2(full_name, 1.0);
 
 % 更改文件名，获得库的位置
 rst_name = full_name;

@@ -106,6 +106,8 @@ else
     full_name = file_path{1};
 end
     
+%full_name = 'E:\PDData\s1\s2\s3\s4\64.txt';
+
 N=1;
 
 %full_name = 'F:\¾Ö·ÅGUI\PDData2\data\C1_12EG018A002__2012_06_14_12_07_38.txt';

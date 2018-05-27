@@ -1,4 +1,4 @@
-function [] = single_data_process2(full_name)
+function [] = single_data_process2(full_name, thre_multi)
 
 % full_name = rst(19,8);
 % full_name = full_name{1};
@@ -25,7 +25,7 @@ STDVSAverageLog=log10(FormFactor);
 if (pre_thre>0)
     ThresthodValue = pre_thre/power_ratio;
 else
-    ThresthodValue=1.5*median(abs(data))/0.6745*sqrt(2*log(length(data)))*PeakVSAverageLog;
+    ThresthodValue=1.5*median(abs(data))/0.6745*sqrt(2*log(length(data)))*PeakVSAverageLog * thre_multi;
 end
 [PDStartStopMaxPoint]=GetWaveShape(data ,0, 0 ,ThresthodValue);%获取所有信号大概的起始点终止点
 
